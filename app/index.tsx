@@ -9,7 +9,7 @@ export default function Index() {
     useEffect(() => {
         const timer = setTimeout(() => {
             router.replace('/(auth)/onboarding');
-        }, 3000);
+        }, 1500);
 
         return () => clearTimeout(timer);
     }, []);
@@ -24,7 +24,7 @@ export default function Index() {
                 />
                 <Image
                     source={require('../assets/images/main_logo.png')}
-                    className="w-96 h-32 -mt-12"
+                    className="w-96 h-32 -mt-14"
                     resizeMode="contain"
                 />
             </View>
