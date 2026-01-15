@@ -9,7 +9,7 @@ export default function RoleSelection() {
     const handleRoleSelect = (role: 'student' | 'teacher') => {
         // TODO: Pass role to sign up or next step
         console.log(`Selected role: ${role}`);
-        router.push('/(auth)/login');
+        router.push('/(auth)/signup');
     };
 
     return (
