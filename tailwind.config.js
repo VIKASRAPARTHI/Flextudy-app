@@ -17,7 +17,7 @@ module.exports = {
                 // Add more custom colors as needed based on the design
             },
             fontFamily: {
-                // We will configure custom fonts later
+                sans: ['Nunito_400Regular'],
             }
         },
     },
