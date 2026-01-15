@@ -1,9 +1,3 @@
-import {
-  Nunito_400Regular,
-  Nunito_500Medium,
-  Nunito_600SemiBold,
-  Nunito_700Bold,
-} from '@expo-google-fonts/nunito';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -23,10 +17,11 @@ export {
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    Nunito_400Regular,
-    Nunito_500Medium,
-    Nunito_600SemiBold,
-    Nunito_700Bold,
+    Nunito_400Regular: require('../assets/fonts/Nunito-Regular.ttf'),
+    Nunito_500Medium: require('../assets/fonts/Nunito-Medium.ttf'),
+    Nunito_600SemiBold: require('../assets/fonts/Nunito-SemiBold.ttf'),
+    Nunito_700Bold: require('../assets/fonts/Nunito-Bold.ttf'),
+    Nunito_800ExtraBold: require('../assets/fonts/Nunito-ExtraBold.ttf'),
     ...FontAwesome.font,
   });
 

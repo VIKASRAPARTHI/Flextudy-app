@@ -11,13 +11,13 @@ export default function Login() {
 
     return (
         <View className="flex-1 justify-center bg-white p-6">
-            <Text className="text-3xl font-bold text-primary mb-2">Welcome Back</Text>
-            <Text className="text-gray-500 mb-8">Sign in to continue</Text>
+            <Text className="text-3xl font-nunito-extrabold text-primary mb-2">Welcome Back</Text>
+            <Text className="text-gray-500 font-nunito-medium mb-8">Sign in to continue</Text>
 
             <View className="mb-4">
-                <Text className="mb-2 font-medium text-gray-700">Email / Phone</Text>
+                <Text className="mb-2 font-nunito-medium text-gray-700">Email / Phone</Text>
                 <TextInput
-                    className="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl"
+                    className="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl font-nunito-regular"
                     placeholder="Enter your email"
                     placeholderTextColor="#9CA3AF"
                 />
@@ -27,7 +27,7 @@ export default function Login() {
                 className="w-full bg-primary p-4 rounded-xl mt-4"
                 onPress={handleLogin}
             >
-                <Text className="text-white text-center font-bold text-lg">Sign In</Text>
+                <Text className="text-white text-center font-nunito-semibold text-lg">Sign In</Text>
             </TouchableOpacity>
         </View>
     );

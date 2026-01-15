@@ -48,7 +48,7 @@ export default function Onboarding() {
             {/* Skip Button */}
             <View className="flex-row justify-end p-4">
                 <TouchableOpacity onPress={handleSkip}>
-                    <Text className="text-gray-500 font-bold text-lg">Skip</Text>
+                    <Text className="text-gray-500 font-nunito-semibold text-lg">Skip</Text>
                 </TouchableOpacity>
             </View>
 
@@ -68,10 +68,10 @@ export default function Onboarding() {
                             className="w-full h-96 mb-8"
                             resizeMode="contain"
                         />
-                        <Text className="text-2xl font-bold text-center text-gray-900 mb-4">
+                        <Text className="text-2xl font-nunito-extrabold text-center text-gray-900 mb-4">
                             {item.title}
                         </Text>
-                        <Text className="text-gray-500 text-center text-base leading-6 px-4">
+                        <Text className="text-gray-500 font-nunito-medium text-center text-base leading-6 px-4">
                             {item.subtitle}
                         </Text>
                     </View>
@@ -84,7 +84,7 @@ export default function Onboarding() {
                     className="bg-primary w-full py-4 rounded-xl items-center"
                     onPress={handleNext}
                 >
-                    <Text className="text-white font-bold text-lg">Next</Text>
+                    <Text className="text-white font-nunito-semibold text-lg">Next</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

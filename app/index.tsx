@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { Image, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
@@ -24,9 +24,14 @@ export default function Index() {
                 />
                 <Image
                     source={require('../assets/images/main_logo.png')}
-                    className="w-96 h-32 -mt-12"
+                    className="w-96 h-32 -mt-6"
                     resizeMode="contain"
                 />
+            </View>
+
+            {/* Loading Indicator */}
+            <View className="items-center pb-4">
+                <Text className="text-gray-500 font-nunito-medium text-lg">Loading . . .</Text>
             </View>
         </SafeAreaView>
     );
