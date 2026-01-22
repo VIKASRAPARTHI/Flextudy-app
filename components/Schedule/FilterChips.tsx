@@ -1,36 +1,42 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 interface FilterChipsProps {
-    tabs: string[];
-    activeTab: string;
-    onTabPress: (tab: string) => void;
+    filters: { label: string; icon?: keyof typeof Ionicons.glyphMap }[];
 }
 
-export const FilterChips: React.FC<FilterChipsProps> = ({ tabs, activeTab, onTabPress }) => {
+export default function FilterChips({ filters }: FilterChipsProps) {
     return (
-        <View className="mb-6 px-6">
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View className="flex-row">
-                    {tabs.map((tab) => (
-                        <TouchableOpacity
-                            key={tab}
-                            onPress={() => onTabPress(tab)}
-                            className={`mr-3 px-6 py-2 rounded-full border ${activeTab === tab
-                                    ? 'bg-[#0061FF] border-[#0061FF]'
-                                    : 'bg-white/10 border-white/20'
-                                }`}
-                        >
-                            <Text
-                                className={`text-sm font-nunito-bold ${activeTab === tab ? 'text-white' : 'text-white/60'
-                                    }`}
-                            >
-                                {tab}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+        <View className="mb-6">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="px-6">
+                {filters.map((filter, index) => (
+                    <Pressable
+                        key={index}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            backgroundColor: 'white',
+                            borderWidth: 1,
+                            borderColor: '#E5E7EB',
+                            borderRadius: 9999,
+                            paddingHorizontal: 16,
+                            paddingVertical: 10,
+                            marginRight: 12,
+                            shadowColor: '#F9FAFB',
+                            shadowOffset: { width: 0, height: 1 },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 1,
+                            elevation: 1,
+                        }}
+                    >
+                        {filter.icon && (
+                            <Ionicons name={filter.icon} size={16} color="#6B7280" style={{ marginRight: 6 }} />
+                        )}
+                        <Text className="text-gray-600 font-nunito-bold text-sm">{filter.label}</Text>
+                    </Pressable>
+                ))}
             </ScrollView>
         </View>
     );
-};
+}
