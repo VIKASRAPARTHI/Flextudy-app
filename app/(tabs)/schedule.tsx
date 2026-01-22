@@ -86,7 +86,7 @@ const COMPLETED_RECENT: ScheduleItem[] = [
         tutorImage: 'https://i.pravatar.cc/150?img=60',
         date: 'Fri • Aug 30',
         time: '3:00–3:45 PM',
-        location: 'Classroom 5A',
+        location: 'Classroom 5A', // Example of physical location
         platform: 'Group',
         status: 'completed',
         statusLabel: 'Completed'
