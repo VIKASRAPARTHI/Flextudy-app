@@ -66,7 +66,7 @@ const INITIAL_MESSAGES = [
     },
 ];
 
-export default function ChatDetail() {
+export default function GroupDetail() {
     const { id, name, avatar } = useLocalSearchParams();
     const router = useRouter();
     const [messages, setMessages] = useState(INITIAL_MESSAGES);
@@ -137,7 +137,7 @@ export default function ChatDetail() {
             {/* Header */}
             <View className="relative z-10 pt-8 pb-4 border-b border-gray-50">
                 <View className="flex-row items-center justify-between px-6 pt-6">
-                    {/* Left: Back & Profile */}
+                    {/* Left: Back & Profile - GROUP HEADER */}
                     <View className="flex-row items-center">
                         <TouchableOpacity onPress={() => router.back()} className="mr-4">
                             <Ionicons name="arrow-back" size={24} color="#000000" />
@@ -145,17 +145,16 @@ export default function ChatDetail() {
 
                         <View className="relative">
                             <Image
-                                source={{ uri: (avatar as string) || 'https://i.pravatar.cc/150?u=1' }}
+                                source={{ uri: (avatar as string) || 'https://ui-avatars.com/api/?name=Group&background=random' }}
                                 className="w-10 h-10 rounded-full bg-indigo-300"
                             />
-                            <View className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
                         </View>
 
                         <View className="ml-3">
                             <Text className="text-gray-900 font-nunito-bold text-lg">
-                                {name || 'Larry Machigo'}
+                                {name || 'Group Chat'}
                             </Text>
-                            <Text className="text-gray-400 text-xs">Online</Text>
+                            <Text className="text-gray-400 text-xs">tap for group info</Text>
                         </View>
                     </View>
 
@@ -182,7 +181,6 @@ export default function ChatDetail() {
                     inverted
                     keyExtractor={(item) => item.id}
                     renderItem={renderMessage}
-                    // Inverted: paddingTop applies to visual BOTTOM, paddingBottom applies to visual TOP
                     contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24, paddingBottom: 60 }}
                     showsVerticalScrollIndicator={false}
                 />
@@ -199,7 +197,7 @@ export default function ChatDetail() {
 
                             <TextInput
                                 className="flex-1 text-gray-900 font-nunito-medium text-base h-full"
-                                placeholder="Ok. Let me check"
+                                placeholder="Message group..."
                                 placeholderTextColor="#9CA3AF"
                                 value={inputText}
                                 onChangeText={setInputText}
