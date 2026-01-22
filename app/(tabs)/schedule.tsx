@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
+import { Pressable, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import FilterChips from '@/components/Schedule/FilterChips';
@@ -13,6 +14,7 @@ const UPCOMING_THIS_WEEK: ScheduleItem[] = [
         id: '1',
         title: 'Algebra II',
         tutorName: 'Ms. Carter',
+        tutorImage: require('../../assets/images/teacher1.png'), // Using our preferred image
         tutorImage: 'https://i.pravatar.cc/150?img=5',
         date: 'Today',
         time: '4:00–4:45 PM',
@@ -86,6 +88,7 @@ const COMPLETED_RECENT: ScheduleItem[] = [
         tutorImage: 'https://i.pravatar.cc/150?img=60',
         date: 'Fri • Aug 30',
         time: '3:00–3:45 PM',
+        location: 'Classroom 5A',
         location: 'Classroom 5A', // Example of physical location
         platform: 'Group',
         status: 'completed',
@@ -98,6 +101,7 @@ const COMPLETED_EARLIER: ScheduleItem[] = [
         id: '7',
         title: 'History',
         tutorName: 'Ms. Carter',
+        tutorImage: require('../../assets/images/teacher1.png'),
         tutorImage: 'https://i.pravatar.cc/150?img=5',
         date: 'Tue • Aug 20',
         time: '2:00–2:45 PM',
@@ -124,6 +128,8 @@ export default function Schedule() {
 
     return (
         <View className="flex-1 bg-white">
+            <StatusBar barStyle="light-content" />
+
             <LinearGradient
                 colors={['#0061FF', '#F0F9FF', '#FFFFFF']}
                 locations={[0, 0.3, 0.6]}
@@ -172,6 +178,7 @@ export default function Schedule() {
                     </View>
                 </View>
 
+                {/* Content Sheet */}
                 <View className="flex-1 bg-white rounded-t-[40px] overflow-hidden">
                     <ScrollView contentContainerStyle={{ paddingBottom: 100, paddingTop: 30 }} showsVerticalScrollIndicator={false}>
                         {activeTab === 'Upcoming' ? (
@@ -186,6 +193,7 @@ export default function Schedule() {
                             </View>
                         ) : (
                             <>
+                                {/* Filter Chips - Specific for Completed */}
                                 {/* Filter Chips - Full Width */}
                                 <View className="pt-2">
                                     <FilterChips
