@@ -14,17 +14,14 @@ export {
   ErrorBoundary
 } from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Nunito_400Regular: require('../assets/fonts/Nunito-Regular.ttf'),
+    Nunito_500Medium: require('../assets/fonts/Nunito-Medium.ttf'),
+    Nunito_600SemiBold: require('../assets/fonts/Nunito-SemiBold.ttf'),
+    Nunito_700Bold: require('../assets/fonts/Nunito-Bold.ttf'),
+    Nunito_800ExtraBold: require('../assets/fonts/Nunito-ExtraBold.ttf'),
     ...FontAwesome.font,
   });
 
@@ -46,15 +43,29 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+import { AuthProvider } from '@/context/AuthContext';
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+          gestureEnabled: true,
+        }}>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="chat/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="group/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="tutor/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="all-classes" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

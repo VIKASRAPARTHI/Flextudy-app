@@ -1,84 +1,226 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import {
+    FlatList,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
-// Mock Messages
 const INITIAL_MESSAGES = [
-    { id: '1', text: 'Hi! I am interested in your Math class.', sender: 'me', time: '10:00 AM' },
-    { id: '2', text: 'Hello! I would be happy to help. What topics are you looking to cover?', sender: 'them', time: '10:05 AM' },
-    { id: '3', text: 'Mostly Calculus and Algebra.', sender: 'me', time: '10:06 AM' },
-    { id: '4', text: 'Perfect! I specialize in those. Would you like to schedule a demo?', sender: 'them', time: '10:10 AM' },
+    {
+        id: '1',
+        text: 'Hey 👋',
+        sender: 'them',
+        time: '10:00 AM',
+    },
+    {
+        id: '2',
+        text: 'Are you available for a New UI Project',
+        sender: 'them',
+        time: '10:05 AM',
+    },
+    {
+        id: '3',
+        text: 'Hello!',
+        sender: 'me',
+        time: '10:06 AM',
+    },
+    {
+        id: '4',
+        text: 'yes, have some space for the new task',
+        sender: 'me',
+        time: '10:07 AM',
+    },
+    {
+        id: '5',
+        text: 'Cool, should I share the details now?',
+        sender: 'them',
+        time: '10:10 AM',
+    },
+    {
+        id: '6',
+        text: 'Yes Sure, please',
+        sender: 'me',
+        time: '10:11 AM',
+    },
+    {
+        id: '7',
+        text: 'Great, here is the SOW of the Project',
+        sender: 'them',
+        time: '10:12 AM',
+    },
+    {
+        id: '8',
+        text: 'UI Brief.docx',
+        sender: 'them',
+        time: '10:12 AM',
+        isAttachment: true,
+        size: '269.18 KB'
+    },
 ];
 
-export default function ChatThread() {
-    const { id } = useLocalSearchParams();
+export default function ChatDetail() {
+    const { id, name, avatar } = useLocalSearchParams();
+    const router = useRouter();
     const [messages, setMessages] = useState(INITIAL_MESSAGES);
     const [inputText, setInputText] = useState('');
 
     const sendMessage = () => {
         if (!inputText.trim()) return;
-        setMessages(prev => [...prev, {
-            id: Date.now().toString(),
-            text: inputText,
-            sender: 'me',
-            time: 'Now'
-        }]);
+        setMessages((prev) => [
+            ...prev,
+            {
+                id: Date.now().toString(),
+                text: inputText,
+                sender: 'me',
+                time: 'Now',
+            },
+        ]);
         setInputText('');
     };
 
+    // Reverse messages for inverted list (Index 0 is Visual Bottom)
+    const invertedMessages = [...messages].reverse();
+
+    const renderMessage = ({ item }: { item: typeof INITIAL_MESSAGES[0] }) => {
+        const isMe = item.sender === 'me';
+
+        if (item.isAttachment) {
+            return (
+                <View className="flex-row mb-6">
+                    <View className="bg-gray-100 p-4 rounded-2xl rounded-tl-none w-[70%] flex-row items-center border border-gray-200">
+                        <View className="w-10 h-10 bg-[#0061FF]/10 rounded-full items-center justify-center mr-3">
+                            <Ionicons name="document-text-outline" size={20} color="#0061FF" />
+                        </View>
+                        <View className="flex-1">
+                            <Text className="text-gray-900 font-none text-base font-nunito-bold">{item.text}</Text>
+                            <Text className="text-gray-500 text-xs">{item.size}</Text>
+                        </View>
+                        <TouchableOpacity className="w-8 h-8 bg-white rounded-full items-center justify-center shadow-sm">
+                            <Ionicons name="download-outline" size={16} color="#4B5563" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+
+        return (
+            <View className={`flex-row mb-6 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                <View
+                    className={`p-4 rounded-[24px] max-w-[80%] ${isMe
+                        ? 'bg-[#0061FF] rounded-tr-none shadow-sm'
+                        : 'bg-gray-100 rounded-tl-none border border-gray-100'
+                        }`}
+                >
+                    <Text
+                        className={`font-nunito-medium text-base ${isMe ? 'text-white' : 'text-gray-900'
+                            }`}
+                    >
+                        {item.text}
+                    </Text>
+                </View>
+            </View>
+        );
+    };
+
     return (
-        <>
-            <Stack.Screen options={{ title: 'Sarah Wilson', headerBackTitle: 'Chats' }} />
+        <SafeAreaView className="flex-1 bg-white">
+            <Stack.Screen options={{ headerShown: false }} />
+
+            {/* Header */}
+            <View className="relative z-10 pt-8 pb-4 border-b border-gray-50">
+                <View className="flex-row items-center justify-between px-6 pt-6">
+                    {/* Left: Back & Profile */}
+                    <View className="flex-row items-center">
+                        <TouchableOpacity onPress={() => router.back()} className="mr-4">
+                            <Ionicons name="arrow-back" size={24} color="#000000" />
+                        </TouchableOpacity>
+
+                        <View className="relative">
+                            <Image
+                                source={{ uri: (avatar as string) || 'https://i.pravatar.cc/150?u=1' }}
+                                className="w-10 h-10 rounded-full bg-indigo-300"
+                            />
+                            <View className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
+                        </View>
+
+                        <View className="ml-3">
+                            <Text className="text-gray-900 font-nunito-bold text-lg">
+                                {name || 'Larry Machigo'}
+                            </Text>
+                            <Text className="text-gray-400 text-xs">Online</Text>
+                        </View>
+                    </View>
+
+                    {/* Right: Call Buttons */}
+                    <View className="flex-row items-center gap-1 pt-2 pr-1">
+                        <TouchableOpacity className="p-2">
+                            <Ionicons name="videocam-outline" size={28} color="#4B5563" />
+                        </TouchableOpacity>
+                        <TouchableOpacity className="p-2">
+                            <Ionicons name="call-outline" size={24} color="#4B5563" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+
+            {/* Chat Area */}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-                className="flex-1 bg-gray-50"
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+                className="flex-1"
             >
                 <FlatList
-                    data={messages}
-                    keyExtractor={item => item.id}
-                    contentContainerStyle={{ padding: 16 }}
-                    renderItem={({ item }) => (
-                        <View className={`mb-4 flex-row ${item.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                            {item.sender === 'them' && (
-                                <View className="w-8 h-8 bg-gray-200 rounded-full mr-2 self-end mb-1" />
-                            )}
-                            <View
-                                className={`p-3 rounded-2xl max-w-[75%] ${item.sender === 'me'
-                                        ? 'bg-primary rounded-tr-none'
-                                        : 'bg-white rounded-tl-none border border-gray-100'
-                                    }`}
-                            >
-                                <Text className={`${item.sender === 'me' ? 'text-white' : 'text-gray-800'}`}>
-                                    {item.text}
-                                </Text>
-                                <Text
-                                    className={`text-[10px] mt-1 text-right ${item.sender === 'me' ? 'text-blue-100' : 'text-gray-400'
-                                        }`}
-                                >
-                                    {item.time}
-                                </Text>
-                            </View>
-                        </View>
-                    )}
+                    data={invertedMessages}
+                    inverted
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderMessage}
+                    // Inverted: paddingTop applies to visual BOTTOM, paddingBottom applies to visual TOP
+                    contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24, paddingBottom: 60 }}
+                    showsVerticalScrollIndicator={false}
                 />
 
-                <View className="bg-white p-4 items-center flex-row border-t border-gray-100 mb-6">
-                    <TextInput
-                        className="flex-1 bg-gray-50 p-3 rounded-full mr-3 text-base"
-                        placeholder="Type a message..."
-                        value={inputText}
-                        onChangeText={setInputText}
-                    />
-                    <TouchableOpacity
-                        className="bg-primary p-3 rounded-full"
-                        onPress={sendMessage}
-                    >
-                        <FontAwesome name="send" size={20} color="white" />
-                    </TouchableOpacity>
+                {/* Input Area */}
+                <View className="px-5 pb-4 pt-2">
+                    <View className="flex-row items-center space-x-3 bg-transparent">
+
+                        {/* Input Field Container */}
+                        <View className="flex-1 flex-row items-center bg-white rounded-full px-5 py-3 min-h-[50px] shadow-sm">
+                            <TouchableOpacity className="mr-2">
+                                <Ionicons name="mic-outline" size={22} color="#9CA3AF" />
+                            </TouchableOpacity>
+
+                            <TextInput
+                                className="flex-1 text-gray-900 font-nunito-medium text-base h-full"
+                                placeholder="Ok. Let me check"
+                                placeholderTextColor="#9CA3AF"
+                                value={inputText}
+                                onChangeText={setInputText}
+                                multiline
+                            />
+
+                            <TouchableOpacity className="ml-1 transform rotate-45">
+                                <Ionicons name="attach-outline" size={24} color="#9CA3AF" />
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Send Button */}
+                        <TouchableOpacity
+                            onPress={sendMessage}
+                            className="w-12 h-12 bg-white rounded-full items-center justify-center shrink-0 shadow-sm"
+                        >
+                            <Ionicons name="send" size={20} color="#0061FF" style={{ marginLeft: 2 }} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </KeyboardAvoidingView>
-        </>
+        </SafeAreaView>
     );
 }

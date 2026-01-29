@@ -1,33 +1,64 @@
-import { useRouter } from 'expo-router';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import React from 'react';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RoleSelection() {
     const router = useRouter();
 
-    const selectRole = (role: 'student' | 'teacher' | 'parent') => {
-        // TODO: Save role to storage
-        console.log('Selected role:', role);
-        router.push('/(auth)/login');
-    }
+    const handleRoleSelect = (role: 'student' | 'teacher') => {
+        // TODO: Pass role to sign up or next step
+        console.log(`Selected role: ${role}`);
+        router.push('/(auth)/signup');
+    };
 
     return (
-        <View className="flex-1 items-center justify-center bg-white p-4 gap-4">
-            <Text className="text-2xl font-bold text-gray-900 mb-8">Choose your role</Text>
+        <SafeAreaView className="flex-1 bg-white px-6 py-6 justify-between">
+            <View className="items-center w-full flex-1 justify-center pt-16">
+                {/* Top Image */}
+                <Image
+                    source={require('../../assets/images/choose_role.jpg')}
+                    className="w-full h-80 mb-6"
+                    resizeMode="contain"
+                />
 
-            <RoleButton title="I am a Student" onPress={() => selectRole('student')} />
-            <RoleButton title="I am a Teacher" onPress={() => selectRole('teacher')} />
-            <RoleButton title="I am a Parent" onPress={() => selectRole('parent')} />
-        </View>
+                {/* Title and Description */}
+                <Text className="text-2xl font-nunito-extrabold text-center text-gray-900 mb-4">
+                    Take a demo class before hiring
+                </Text>
+                <Text className="text-gray-500 font-nunito-medium text-center text-base leading-6 mb-8 px-4">
+                    You can arrange or take a demo class before appointing a teacher. As a result, you will get an advance idea about the tutor's teaching quality
+                </Text>
+
+                {/* Join As Section */}
+                <Text className="text-lg font-nunito-extrabold text-gray-900 mb-6 self-start w-full text-center mt-12">Join As</Text>
+
+                <View className="flex-row w-full justify-between gap-4 mb-4">
+                    <TouchableOpacity
+                        className="flex-1 bg-primary py-4 rounded-xl items-center"
+                        onPress={() => handleRoleSelect('student')}
+                    >
+                        <Text className="text-white font-nunito-semibold text-lg">Student</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        className="flex-1 bg-gray-100 py-4 rounded-xl items-center"
+                        onPress={() => handleRoleSelect('teacher')}
+                    >
+                        <Text className="text-gray-900 font-nunito-semibold text-lg">Teacher</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* Login Link */}
+            <View className="flex-row items-center justify-center pb-4">
+                <Text className="text-gray-500 font-nunito-medium text-base">Already have an account? </Text>
+                <Link href="/(auth)/login" asChild>
+                    <TouchableOpacity>
+                        <Text className="text-primary font-nunito-semibold text-base">Log In</Text>
+                    </TouchableOpacity>
+                </Link>
+            </View>
+        </SafeAreaView>
     );
-}
-
-function RoleButton({ title, onPress }: { title: string, onPress: () => void }) {
-    return (
-        <TouchableOpacity
-            className="w-full bg-gray-100 p-6 rounded-xl border border-gray-200 active:bg-blue-50"
-            onPress={onPress}
-        >
-            <Text className="text-lg font-semibold text-center text-gray-800">{title}</Text>
-        </TouchableOpacity>
-    )
 }
