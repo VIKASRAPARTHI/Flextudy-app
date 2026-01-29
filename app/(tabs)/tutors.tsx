@@ -126,9 +126,8 @@ export default function Tutors() {
         setSelectedFormat(null);
     };
 
-    const renderChip = (label: string, isSelected: boolean, onSelect: () => void, key?: string | number) => (
+    const renderChip = (label: string, isSelected: boolean, onSelect: () => void) => (
         <TouchableOpacity
-            key={key}
             onPress={onSelect}
             className={`px-5 py-2 rounded-full mr-2 mb-2 border ${isSelected ? 'bg-blue-50 border-blue-400' : 'bg-white border-gray-200'}`}
         >
@@ -299,24 +298,24 @@ export default function Tutors() {
                             {/* Subjects */}
                             <Text className="text-base font-nunito-bold text-gray-700 mb-3">Subjects</Text>
                             <View className="flex-row flex-wrap mb-4">
-                                {['Math', 'Science', 'Languages', 'History'].map((tag, idx) =>
-                                    renderChip(tag, selectedSubject === tag, () => setSelectedSubject(tag === selectedSubject ? null : tag), `subject-${idx}`)
+                                {['Math', 'Science', 'Languages', 'History'].map(tag =>
+                                    renderChip(tag, selectedSubject === tag, () => setSelectedSubject(tag === selectedSubject ? null : tag))
                                 )}
                             </View>
 
                             {/* Level */}
                             <Text className="text-base font-nunito-bold text-gray-700 mb-3">Level</Text>
                             <View className="flex-row flex-wrap mb-4">
-                                {['K-5', 'Middle', 'High', 'College'].map((tag, idx) =>
-                                    renderChip(tag, selectedLevel === tag, () => setSelectedLevel(tag === selectedLevel ? null : tag), `level-${idx}`)
+                                {['K-5', 'Middle', 'High', 'College'].map(tag =>
+                                    renderChip(tag, selectedLevel === tag, () => setSelectedLevel(tag === selectedLevel ? null : tag))
                                 )}
                             </View>
 
                             {/* Format */}
                             <Text className="text-base font-nunito-bold text-gray-700 mb-3">Format</Text>
                             <View className="flex-row flex-wrap mb-6">
-                                {['Remote', 'In-person', 'Group', '1:1'].map((tag, idx) =>
-                                    renderChip(tag, selectedFormat === tag, () => setSelectedFormat(tag === selectedFormat ? null : tag), `format-${idx}`)
+                                {['Remote', 'In-person', 'Group', '1:1'].map(tag =>
+                                    renderChip(tag, selectedFormat === tag, () => setSelectedFormat(tag === selectedFormat ? null : tag))
                                 )}
                             </View>
 

@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAuth } from '@/context/AuthContext';
 import { useLocalSearchParams } from 'expo-router';
+import { useAuth } from '../../context/AuthContext';
 
 export default function SetDetails() {
     const router = useRouter();
