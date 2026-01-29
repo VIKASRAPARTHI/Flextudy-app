@@ -1,9 +1,9 @@
+import { useAuth } from '@/context/AuthContext';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
     const router = useRouter();
