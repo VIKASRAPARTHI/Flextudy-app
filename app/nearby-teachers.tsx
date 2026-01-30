@@ -1,9 +1,10 @@
+import { MapComponent as MapView, Marker, PROVIDER_GOOGLE } from '@/components/MapComponent';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import type MapViewType from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,7 +60,7 @@ const FILTER_CHIPS = ['All Subjects', 'Math', 'Science', 'English', 'History'];
 
 export default function NearbyTeachersScreen() {
     const router = useRouter();
-    const mapRef = useRef<MapView>(null);
+    const mapRef = useRef<MapViewType>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<typeof NEARBY_TEACHERS[0] | null>(NEARBY_TEACHERS[0]);
     const [activeFilter, setActiveFilter] = useState('All Subjects');
     const [location, setLocation] = useState<Location.LocationObject | null>(null);

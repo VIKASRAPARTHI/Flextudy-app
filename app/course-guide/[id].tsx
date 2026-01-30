@@ -124,7 +124,7 @@ export default function CourseGuideScreen() {
                         </TouchableOpacity>
                         <TouchableOpacity
                             className="flex-1 bg-[#0061FF] h-14 rounded-2xl items-center justify-center shadow-lg shadow-blue-500/20"
-                            onPress={() => alert('Proceeding to Checkout...')}
+                            onPress={() => router.push(`/checkout/${id}` as any)}
                         >
                             <Text className="text-white font-nunito-extrabold text-base">Enroll Now</Text>
                         </TouchableOpacity>

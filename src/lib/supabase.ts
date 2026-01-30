@@ -14,9 +14,31 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const effectiveUrl = supabaseUrl || 'https://placeholder.supabase.co';
 const effectiveKey = supabaseAnonKey || 'placeholder';
 
+// Custom storage adapter to handle environments where AsyncStorage might fail (like Node/SSR)
+const ExpoStorage = {
+    getItem: (key: string) => {
+        if (typeof window !== 'undefined') {
+            return AsyncStorage.getItem(key);
+        }
+        return Promise.resolve(null);
+    },
+    setItem: (key: string, value: string) => {
+        if (typeof window !== 'undefined') {
+            return AsyncStorage.setItem(key, value);
+        }
+        return Promise.resolve();
+    },
+    removeItem: (key: string) => {
+        if (typeof window !== 'undefined') {
+            return AsyncStorage.removeItem(key);
+        }
+        return Promise.resolve();
+    },
+};
+
 export const supabase = createClient(effectiveUrl, effectiveKey, {
     auth: {
-        storage: AsyncStorage,
+        storage: ExpoStorage,
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: false,

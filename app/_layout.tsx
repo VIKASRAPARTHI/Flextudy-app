@@ -51,14 +51,20 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="chat/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="group/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="tutor/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="chat/[id]" />
+          <Stack.Screen name="group/[id]" />
+          <Stack.Screen name="tutor/[id]" />
+          <Stack.Screen name="course-details/[id]" />
+          <Stack.Screen name="course-guide/[id]" />
+          <Stack.Screen name="course-video/[id]" />
+          <Stack.Screen name="shorts/index" />
+          <Stack.Screen name="shorts/[id]" />
+          <Stack.Screen name="checkout/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: true }} />
         </Stack>
       </ThemeProvider>
     </AuthProvider>
