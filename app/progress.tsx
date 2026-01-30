@@ -109,9 +109,9 @@ export default function ProgressScreen() {
             <View className="flex-row items-center justify-between mb-8">
                 <TouchableOpacity
                     onPress={() => router.back()}
-                    className="w-10 h-10 items-center justify-center bg-white rounded-full shadow-sm"
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
                 >
-                    <Ionicons name="chevron-back" size={24} color="#1E293B" />
+                    <Ionicons name="chevron-back" size={24} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity className="w-10 h-10 items-center justify-center">
                     <Ionicons name="notifications-outline" size={24} color="white" />

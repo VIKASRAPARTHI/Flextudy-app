@@ -95,6 +95,7 @@ export default function LecturesScreen() {
                             key={lecture.id}
                             className="bg-white rounded-[32px] p-4 mb-5 shadow-sm flex-row items-center border border-gray-100"
                             activeOpacity={0.9}
+                            onPress={() => router.push({ pathname: '/lecture-video/[id]', params: { id: lecture.id } })}
                         >
                             {/* Thumbnail */}
                             <View className="w-28 h-28 rounded-2xl overflow-hidden relative mr-4 bg-gray-100">

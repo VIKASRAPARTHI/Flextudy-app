@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
@@ -28,11 +29,13 @@ const videos = [
 ];
 
 export default function ShortVideos() {
+    const router = useRouter();
+
     return (
         <View className="mb-8">
             <View className="flex-row justify-between items-center mb-5">
                 <Text className="text-xl font-nunito-extrabold text-[#1E293B]">Short Tutorials</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/shorts' as any)}>
                     <Text className="text-sm font-nunito-bold text-[#0061FF]">View All</Text>
                 </TouchableOpacity>
             </View>
@@ -44,7 +47,12 @@ export default function ShortVideos() {
                 contentContainerStyle={{ paddingHorizontal: 24 }}
             >
                 {videos.map((video) => (
-                    <TouchableOpacity key={video.id} className="mr-5 w-44" activeOpacity={0.9}>
+                    <TouchableOpacity
+                        key={video.id}
+                        className="mr-5 w-44"
+                        activeOpacity={0.9}
+                        onPress={() => router.push({ pathname: '/shorts/[id]', params: { id: video.id } } as any)}
+                    >
                         <View className="w-44 h-64 rounded-[32px] overflow-hidden bg-gray-100 shadow-sm border border-gray-100">
                             <Image source={{ uri: video.thumbnail }} className="w-full h-full" />
                             <LinearGradient

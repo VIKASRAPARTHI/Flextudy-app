@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import FilterChips from '@/components/Schedule/FilterChips';
 import ScheduleCard, { ScheduleItem } from '@/components/Schedule/ScheduleCard';
@@ -15,7 +14,6 @@ const UPCOMING_THIS_WEEK: ScheduleItem[] = [
         title: 'Algebra II',
         tutorName: 'Ms. Carter',
         tutorImage: require('../../assets/images/teacher1.png'), // Using our preferred image
-        tutorImage: 'https://i.pravatar.cc/150?img=5',
         date: 'Today',
         time: '4:00–4:45 PM',
         platform: 'Zoom',
@@ -89,7 +87,6 @@ const COMPLETED_RECENT: ScheduleItem[] = [
         date: 'Fri • Aug 30',
         time: '3:00–3:45 PM',
         location: 'Classroom 5A',
-        location: 'Classroom 5A', // Example of physical location
         platform: 'Group',
         status: 'completed',
         statusLabel: 'Completed'
@@ -102,7 +99,6 @@ const COMPLETED_EARLIER: ScheduleItem[] = [
         title: 'History',
         tutorName: 'Ms. Carter',
         tutorImage: require('../../assets/images/teacher1.png'),
-        tutorImage: 'https://i.pravatar.cc/150?img=5',
         date: 'Tue • Aug 20',
         time: '2:00–2:45 PM',
         platform: 'Google Meet',

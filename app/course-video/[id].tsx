@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import React from 'react';
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 const LESSONS = [
     // Course Video mock data
@@ -17,6 +18,11 @@ const LESSONS = [
 export default function CourseVideoScreen() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
+    const videoSource = require('../../assets/videos/video1.mp4');
+
+    const player = useVideoPlayer(videoSource, player => {
+        player.loop = true;
+    });
 
     return (
         <View className="flex-1 bg-[#0061FF]">
@@ -44,32 +50,13 @@ export default function CourseVideoScreen() {
                 >
                     {/* Video Player Section */}
                     <View className="px-6 mb-8">
-                        <View className="h-56 bg-black rounded-[32px] overflow-hidden relative shadow-lg">
-                            <Image
-                                source={{ uri: 'https://img.freepik.com/free-photo/male-teacher-standing-front-blackboard_23-2148700620.jpg' }}
-                                className="w-full h-full opacity-70"
-                                resizeMode="cover"
+                        <View className="bg-black rounded-[32px] overflow-hidden shadow-lg" style={{ height: 220 }}>
+                            <VideoView
+                                style={{ width: '100%', height: 220 }}
+                                player={player}
+                                fullscreenOptions={{ enable: true }}
+                                allowsPictureInPicture
                             />
-
-                            {/* Overlay Controls */}
-                            <View className="absolute inset-0 items-center justify-center">
-                                <TouchableOpacity
-                                    className="w-16 h-16 rounded-full bg-white/20 border-2 border-white/60 items-center justify-center backdrop-blur-md"
-                                    activeOpacity={0.8}
-                                >
-                                    <Ionicons name="play" size={32} color="white" style={{ marginLeft: 4 }} />
-                                </TouchableOpacity>
-
-                                {/* Duration Badge */}
-                                <View className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded-lg">
-                                    <Text className="text-white text-[10px] font-nunito-bold">11:06 / 23:25</Text>
-                                </View>
-                            </View>
-
-                            {/* Progress Bar (Simulated) */}
-                            <View className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-                                <View className="w-[45%] h-full bg-[#0061FF]" />
-                            </View>
                         </View>
                     </View>
 
