@@ -1,22 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 const GRID_DATA = [
-    { day: 0, subjects: [{ name: 'Turkish', color: '#10B981' }, { name: 'Georp..', color: '#10B981' }, { name: 'Art', color: '#FF6600' }] },
-    { day: 1, subjects: [{ name: 'History', color: '#10B981' }, { name: 'Math', color: '#F29393' }, { name: 'Chem..', color: '#0061FF' }] },
+    { day: 0, subjects: [{ name: 'Turkish', color: '#0061FF' }, { name: 'Georp..', color: '#0061FF' }, { name: 'Art', color: '#F59E0B' }] },
+    { day: 1, subjects: [{ name: 'History', color: '#0061FF' }, { name: 'Math', color: '#F59E0B' }, { name: 'Chem..', color: '#0061FF' }] },
     { day: 2, subjects: [{ name: 'English', color: '#0061FF' }, { name: 'Biology', color: '#0061FF' }, { name: 'Math', color: '#0061FF' }, { name: 'Biology', color: '#0061FF' }] },
-    { day: 3, subjects: [{ name: 'Chemi..', color: '#FF6600' }] },
-    { day: 4, subjects: [{ name: 'Music', color: '#F29393' }, { name: 'Art', color: '#F29393' }] },
+    { day: 3, subjects: [{ name: 'Chemi..', color: '#F59E0B' }] },
+    { day: 4, subjects: [{ name: 'Music', color: '#F59E0B' }, { name: 'Art', color: '#F59E0B' }] },
     { day: 5, subjects: [] },
     { day: 6, subjects: [] },
 ];
 
 const TASKS = [
-    { id: 1, subject: 'Math', icon: '🧮', description: 'Exercises 21—23, p.15', status: 'Assigned', statusColor: 'bg-[#FFF7ED]', textColor: 'text-[#FF6600]' },
-    { id: 2, subject: 'Chemistry', icon: '🧪', description: 'Exercises 7—9, p. 42.', status: 'Assigned', statusColor: 'bg-[#FFF7ED]', textColor: 'text-[#FF6600]' },
-    { id: 3, subject: 'History', icon: '🏛️', description: 'Read Chapter 4 and summarize key events...', status: 'Completed', statusColor: 'bg-[#ECFDF5]', textColor: 'text-[#10B981]', strike: true },
+    { id: 1, subject: 'Math', icon: '🧮', description: 'Exercises 21—23, p.15', status: 'Assigned', statusColor: 'bg-orange-50', textColor: 'text-[#F59E0B]' },
+    { id: 2, subject: 'Chemistry', icon: '🧪', description: 'Exercises 7—9, p. 42.', status: 'Assigned', statusColor: 'bg-orange-50', textColor: 'text-[#F59E0B]' },
+    { id: 3, subject: 'History', icon: '🏛️', description: 'Read Chapter 4 and summarize key events...', status: 'Completed', statusColor: 'bg-blue-50', textColor: 'text-[#0061FF]', strike: true },
 ];
 
 export default function HomeworkScreen() {
@@ -100,109 +100,108 @@ export default function HomeworkScreen() {
     const selectedDateStr = weekDates[selectedDateIndex]?.fullDateStr || '';
 
     return (
-        <View className="flex-1 bg-[#F8FAFC]">
-            <StatusBar barStyle="dark-content" />
+        <View className="flex-1 bg-[#0061FF]">
+            <StatusBar barStyle="light-content" />
 
-            {/* Header */}
-            <View className="px-6 pt-12 pb-4">
-                <TouchableOpacity onPress={() => router.back()} className="mb-4">
-                    <Ionicons name="chevron-back" size={28} color="#1E293B" />
-                </TouchableOpacity>
-
-                <View className="flex-row justify-between items-center">
-                    <Text className="text-3xl font-nunito-extrabold text-[#1E293B]">Homework</Text>
-                    <TouchableOpacity className="flex-row items-center bg-white px-4 py-2 rounded-full shadow-sm">
-                        <Text className="text-[#0061FF] font-nunito-bold text-sm mr-2">Statistics</Text>
-                        <Image
-                            source={{ uri: 'https://cdn-icons-png.flaticon.com/512/732/732204.png' }}
-                            className="w-5 h-5"
-                        />
+            {/* Sticky Header */}
+            <View className="px-6 pt-12 pb-6">
+                <View className="flex-row items-center justify-between mb-2">
+                    <TouchableOpacity
+                        onPress={() => router.back()}
+                        className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                    >
+                        <Ionicons name="chevron-back" size={24} color="white" />
+                    </TouchableOpacity>
+                    <Text className="text-xl font-nunito-extrabold text-white">Homework</Text>
+                    <TouchableOpacity className="w-10 h-10 items-center justify-center">
+                        <Ionicons name="stats-chart" size={22} color="white" />
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-                {/* Date Selection */}
-                <View className="px-6 mt-4 mb-2 flex-row justify-between items-center">
-                    <Text className="text-xl font-nunito-extrabold text-[#1E293B]">{selectedDateStr}</Text>
-                    <TouchableOpacity
-                        onPress={() => setShowMonthPicker(true)}
-                        className="w-10 h-10 bg-white rounded-xl items-center justify-center shadow-sm"
-                    >
-                        <Ionicons name="calendar-outline" size={20} color="#0061FF" />
-                    </TouchableOpacity>
-                </View>
+            <View className="flex-1 bg-white rounded-t-[40px] shadow-2xl overflow-hidden">
+                <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, paddingTop: 30 }}>
+                    {/* Date Selection */}
+                    <View className="px-6 mb-2 flex-row justify-between items-center">
+                        <Text className="text-xl font-nunito-extrabold text-[#1E293B]">{selectedDateStr}</Text>
+                        <TouchableOpacity
+                            onPress={() => setShowMonthPicker(true)}
+                            className="w-10 h-10 bg-gray-50 border border-gray-100 rounded-xl items-center justify-center"
+                        >
+                            <Ionicons name="calendar-outline" size={20} color="#0061FF" />
+                        </TouchableOpacity>
+                    </View>
 
-                {/* Subject Grid */}
-                <View className="bg-white mx-6 rounded-[40px] p-6 shadow-xl shadow-black/5 mt-4">
-                    <View className="flex-row justify-between border-b border-gray-50 pb-4 mb-4">
-                        {weekDates.map((item, i) => (
-                            <TouchableOpacity
-                                key={i}
-                                onPress={() => setSelectedDateIndex(i)}
-                                className="items-center w-[14%]"
-                            >
-                                <Text className={`font-nunito-bold text-[10px] mb-2 ${selectedDateIndex === i ? 'text-[#0061FF]' : 'text-[#64748B]'}`}>
-                                    {item.day}
-                                </Text>
-                                <View className={`w-8 h-8 rounded-full items-center justify-center ${selectedDateIndex === i ? 'bg-[#1E293B]' : ''}`}>
-                                    <Text className={`font-nunito-extrabold text-sm ${selectedDateIndex === i ? 'text-white' : 'text-[#1E293B]'}`}>
-                                        {item.date}
+                    {/* Subject Grid */}
+                    <View className="bg-white mx-6 rounded-[40px] p-6 border border-gray-50 shadow-sm mt-4">
+                        <View className="flex-row justify-between border-b border-gray-50 pb-4 mb-4">
+                            {weekDates.map((item, i) => (
+                                <TouchableOpacity
+                                    key={i}
+                                    onPress={() => setSelectedDateIndex(i)}
+                                    className="items-center w-[14%]"
+                                >
+                                    <Text className={`font-nunito-bold text-[10px] mb-2 ${selectedDateIndex === i ? 'text-[#0061FF]' : 'text-[#64748B]'}`}>
+                                        {item.day}
+                                    </Text>
+                                    <View className={`w-8 h-8 rounded-full items-center justify-center ${selectedDateIndex === i ? 'bg-[#1E293B]' : ''}`}>
+                                        <Text className={`font-nunito-extrabold text-sm ${selectedDateIndex === i ? 'text-white' : 'text-[#1E293B]'}`}>
+                                            {item.date}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        <View className="flex-row justify-between">
+                            {GRID_DATA.map((col, i) => (
+                                <View key={i} className="w-[14%] items-center">
+                                    {col.subjects.map((sub, j) => (
+                                        <View
+                                            key={j}
+                                            style={{ backgroundColor: sub.color, opacity: selectedDateIndex === i ? 1 : 0.6 }}
+                                            className="w-full py-1.5 rounded-lg mb-2 items-center px-0.5"
+                                        >
+                                            <Text className="text-white font-nunito-bold text-[8px]" numberOfLines={1}>{sub.name}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+
+                    {/* Today's Tasks */}
+                    <View className="px-6 mt-8">
+                        <View className="flex-row justify-between items-center mb-6">
+                            <Text className="text-xl font-nunito-extrabold text-[#1E293B]">Today's tasks</Text>
+                            <TouchableOpacity className="w-10 h-10 bg-gray-50 border border-gray-100 rounded-2xl items-center justify-center">
+                                <Ionicons name="options-outline" size={20} color="#1E293B" />
+                            </TouchableOpacity>
+                        </View>
+
+                        {TASKS.map((task) => (
+                            <TouchableOpacity key={task.id} className="bg-white rounded-[32px] p-5 mb-4 shadow-sm flex-row items-center border border-gray-100">
+                                <View className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center mr-4">
+                                    <Text className="text-2xl">{task.icon}</Text>
+                                </View>
+                                <View className="flex-1">
+                                    <View className="flex-row justify-between items-center mb-1">
+                                        <Text className={`text-lg font-nunito-extrabold text-[#1E293B] ${task.strike ? 'line-through opacity-50' : ''}`}>
+                                            {task.subject}
+                                        </Text>
+                                        <View className={`${task.statusColor} px-3 py-1 rounded-full`}>
+                                            <Text className={`${task.textColor} font-nunito-bold text-[10px] uppercase`}>{task.status}</Text>
+                                        </View>
+                                    </View>
+                                    <Text className="text-[#64748B] font-nunito-medium text-xs leading-5" numberOfLines={1}>
+                                        {task.description}
                                     </Text>
                                 </View>
-                                {selectedDateIndex === i && <View className="absolute -bottom-1 w-[120%] h-40 bg-blue-50/30 rounded-full -z-10" />}
                             </TouchableOpacity>
                         ))}
                     </View>
-
-                    <View className="flex-row justify-between">
-                        {GRID_DATA.map((col, i) => (
-                            <View key={i} className="w-[14%] items-center">
-                                {col.subjects.map((sub, j) => (
-                                    <View
-                                        key={j}
-                                        style={{ backgroundColor: sub.color, opacity: selectedDateIndex === i ? 1 : 0.6 }}
-                                        className="w-full py-1.5 rounded-lg mb-2 items-center px-0.5"
-                                    >
-                                        <Text className="text-white font-nunito-bold text-[8px]" numberOfLines={1}>{sub.name}</Text>
-                                    </View>
-                                ))}
-                            </View>
-                        ))}
-                    </View>
-                </View>
-
-                {/* Today's Tasks */}
-                <View className="px-6 mt-8">
-                    <View className="flex-row justify-between items-center mb-6">
-                        <Text className="text-xl font-nunito-bold text-[#1E293B]">Today's tasks</Text>
-                        <TouchableOpacity className="w-10 h-10 bg-white shadow-sm rounded-2xl items-center justify-center">
-                            <Ionicons name="options-outline" size={20} color="#1E293B" />
-                        </TouchableOpacity>
-                    </View>
-
-                    {TASKS.map((task) => (
-                        <TouchableOpacity key={task.id} className="bg-white rounded-[32px] p-5 mb-4 shadow-sm flex-row items-center border border-white">
-                            <View className="w-12 h-12 bg-[#F8FAFC] rounded-2xl items-center justify-center mr-4">
-                                <Text className="text-2xl">{task.icon}</Text>
-                            </View>
-                            <View className="flex-1">
-                                <View className="flex-row justify-between items-center mb-1">
-                                    <Text className={`text-lg font-nunito-bold text-[#1E293B] ${task.strike ? 'line-through opacity-50' : ''}`}>
-                                        {task.subject}
-                                    </Text>
-                                    <View className={`${task.statusColor} px-3 py-1 rounded-full`}>
-                                        <Text className={`${task.textColor} font-nunito-bold text-[10px] uppercase`}>{task.status}</Text>
-                                    </View>
-                                </View>
-                                <Text className="text-[#64748B] font-nunito-medium text-xs leading-5" numberOfLines={1}>
-                                    {task.description}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
 
             {/* Month Picker Modal */}
             {showMonthPicker && (

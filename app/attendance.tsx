@@ -1,188 +1,155 @@
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 const ATTENDANCE_DATA = [
     {
         id: '1',
-        code: 'MATH101',
         subject: 'ADVANCED MATHEMATICS',
-        group: 'Group: 1',
         faculty: 'Dr. Sarah Wilson',
-        seating: 'Room 302, Phase 2',
         lastAttended: 'Jan 28, 2026',
         attended: 18,
         delivered: 20,
         percentage: 90,
-        section: 'SEC-A24',
-        rollNo: 'FX2026A12'
     },
     {
         id: '2',
-        code: 'PHYS201',
         subject: 'CLASSICAL MECHANICS',
-        group: 'Group: 2',
         faculty: 'Prof. James Anderson',
-        seating: 'Lab 10, Science Block',
         lastAttended: 'Jan 27, 2026',
         attended: 12,
         delivered: 18,
         percentage: 67,
-        section: 'SEC-B12',
-        rollNo: 'FX2026A12'
     },
     {
         id: '3',
-        code: 'CHEM105',
         subject: 'ORGANIC CHEMISTRY',
-        group: 'Group: 1',
         faculty: 'Dr. Emily Chen',
-        seating: 'Hall 4, Chemistry Wing',
         lastAttended: 'Jan 26, 2026',
         attended: 15,
         delivered: 15,
         percentage: 100,
-        section: 'SEC-A24',
-        rollNo: 'FX2026A12'
     },
     {
         id: '4',
-        code: 'ENG102',
         subject: 'MODERN ENGLISH LIT',
-        group: 'Group: 3',
         faculty: 'Prof. Robert Taylor',
-        seating: 'Main Auditorium',
         lastAttended: 'Jan 25, 2026',
         attended: 22,
         delivered: 25,
         percentage: 88,
-        section: 'SEC-C08',
-        rollNo: 'FX2026A12'
     }
 ];
 
 export default function AttendanceScreen() {
     const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const getRingColor = (percent: number) => {
-        if (percent >= 85) return '#10B981'; // Green
-        if (percent >= 75) return '#0061FF'; // Brand Blue
-        return '#F97316'; // Orange
+    const filteredAttendance = ATTENDANCE_DATA.filter(item =>
+        item.subject.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const getAccentColor = (percent: number) => {
+        return percent >= 75 ? '#0061FF' : '#F59E0B';
     };
 
     return (
-        <View className="flex-1 bg-[#F8FAFC]">
-            <StatusBar barStyle="dark-content" />
+        <View className="flex-1 bg-[#0061FF]">
+            <StatusBar barStyle="light-content" />
 
             {/* Header */}
-            <View className="px-6 pt-12 pb-4 flex-row items-center justify-between">
-                <TouchableOpacity
-                    onPress={() => router.back()}
-                    className="w-10 h-10 items-center justify-center bg-white rounded-full shadow-sm"
-                >
-                    <Ionicons name="chevron-back" size={24} color="#1E293B" />
-                </TouchableOpacity>
-                <Text className="text-xl font-nunito-extrabold text-[#1E293B]">Attendance</Text>
-                <View className="w-10" />
-            </View>
+            <View className="px-6 pt-12 pb-10">
+                <View className="flex-row items-center justify-between mb-8">
+                    <TouchableOpacity
+                        onPress={() => router.back()}
+                        className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                    >
+                        <Ionicons name="chevron-back" size={24} color="white" />
+                    </TouchableOpacity>
+                    <Text className="text-xl font-nunito-extrabold text-white">Attendance</Text>
+                    <View className="w-10" />
+                </View>
 
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-                {/* Aggregate Bar */}
-                <View className="px-6 mt-4">
-                    <View className="bg-white rounded-2xl p-4 flex-row justify-between items-center shadow-sm border border-gray-100">
-                        <Text className="text-[#1E293B] font-nunito-extrabold text-sm tracking-wider uppercase">Aggregate Attendance</Text>
-                        <LinearGradient
-                            colors={['#F97316', '#FCA5A5']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            className="px-4 py-1 rounded-lg"
-                        >
-                            <Text className="text-white font-nunito-extrabold text-sm">88%</Text>
-                        </LinearGradient>
+                {/* Aggregate Summary */}
+                <View className="bg-white/10 rounded-3xl p-6 flex-row justify-between items-center border border-white/10">
+                    <View>
+                        <Text className="text-white/60 font-nunito-bold text-[10px] uppercase tracking-wider mb-1">Overall Presence</Text>
+                        <Text className="text-white font-nunito-extrabold text-3xl">88.5%</Text>
+                    </View>
+                    <View className="bg-white px-4 py-2 rounded-xl shadow-sm">
+                        <Text className="text-[#0061FF] font-nunito-extrabold text-xs">Good Standing</Text>
                     </View>
                 </View>
+            </View>
 
-                {/* Subject Cards */}
-                <View className="px-6 mt-6">
-                    {ATTENDANCE_DATA.map((item) => (
-                        <TouchableOpacity
-                            key={item.id}
-                            activeOpacity={0.8}
-                            onPress={() => router.push({ pathname: "/attendance/[id]", params: { id: item.id } })}
-                            className="bg-white rounded-3xl mb-6 shadow-sm border border-gray-100 overflow-hidden"
-                        >
-                            {/* Card Top Section */}
-                            <View className="p-5">
-                                <View className="flex-row justify-between items-start mb-4">
-                                    <View className="flex-1">
-                                        <Text className="text-gray-400 font-nunito-bold text-[10px] mb-1">{item.code}</Text>
-                                        <Text className="text-[#1E293B] font-nunito-extrabold text-sm leading-5">{item.subject}</Text>
-                                    </View>
-                                    {/* Group Ribbon style */}
-                                    <View className="bg-orange-100 px-3 py-1 rounded-bl-xl rounded-tr-xl flex-row items-center">
-                                        <Text className="text-orange-600 font-nunito-bold text-[10px] uppercase">{item.group}</Text>
-                                    </View>
-                                </View>
+            <View className="flex-1 bg-white rounded-t-[40px] shadow-2xl overflow-hidden">
+                <ScrollView
+                    className="flex-1"
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 40, paddingTop: 30 }}
+                >
+                    <View className="px-6">
 
-                                <View className="h-px bg-gray-50 mb-4" />
+                        {/* Subject Cards */}
+                        <Text className="text-[#1E293B] font-nunito-extrabold text-lg mb-6">Course Attendance</Text>
 
-                                <View className="flex-row items-center justify-between">
-                                    <View className="space-y-2 flex-1">
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs w-28">Faculty:</Text>
-                                            <Text className="text-[#1E293B] font-nunito-bold text-xs">{item.faculty}</Text>
-                                        </View>
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs w-28">Faculty Seating:</Text>
-                                            <Text className="text-gray-500 font-nunito-medium text-xs">{item.seating}</Text>
-                                        </View>
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs w-28">Last Attended:</Text>
-                                            <Text className="text-gray-500 font-nunito-medium text-xs">{item.lastAttended}</Text>
-                                        </View>
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs w-28">Attended/Delivered:</Text>
-                                            <Text className="text-gray-500 font-nunito-medium text-xs">{item.attended}/{item.delivered}</Text>
-                                        </View>
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs w-28">Duty Leaves:</Text>
-                                            <Text className="text-gray-500 font-nunito-medium text-xs">0</Text>
+                        {filteredAttendance.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                activeOpacity={0.9}
+                                onPress={() => router.push({ pathname: "/attendance/[id]", params: { id: item.id } })}
+                                className="bg-white rounded-[32px] mb-6 shadow-sm border border-gray-100 overflow-hidden flex-row"
+                            >
+                                <View style={{ backgroundColor: getAccentColor(item.percentage) }} className="w-1.5 h-full" />
+                                <View className="flex-1 p-5">
+                                    <View className="flex-row justify-between items-start mb-4">
+                                        <Text className="text-[#1E293B] font-nunito-extrabold text-base leading-5 flex-1 pr-4" numberOfLines={2}>
+                                            {item.subject}
+                                        </Text>
+
+                                        <View className="items-end">
+                                            <Text style={{ color: getAccentColor(item.percentage) }} className="font-nunito-extrabold text-lg">
+                                                {item.percentage}%
+                                            </Text>
+                                            <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">Attendance</Text>
                                         </View>
                                     </View>
 
-                                    {/* Percentage Circle Ring */}
-                                    <View className="w-16 h-16 items-center justify-center">
-                                        <View className="w-16 h-16 rounded-full border-4 border-gray-100 items-center justify-center">
-                                            <View
-                                                className="w-16 h-16 rounded-full border-4 absolute border-t-transparent border-r-transparent"
-                                                style={{
-                                                    borderColor: getRingColor(item.percentage),
-                                                    transform: [{ rotate: `${(item.percentage / 100) * 360 - 90}deg` }]
-                                                }}
-                                            />
-                                            <Text className="text-[#1E293B] font-nunito-extrabold text-xs">{item.percentage}%</Text>
+                                    <View className="flex-row justify-between items-center pt-4 border-t border-gray-50">
+                                        <View className="flex-row items-center">
+                                            <View className="w-8 h-8 rounded-full bg-gray-50 items-center justify-center mr-3">
+                                                <Ionicons name="person-outline" size={14} color="#64748B" />
+                                            </View>
+                                            <View>
+                                                <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">Faculty</Text>
+                                                <Text className="text-[#1E293B] font-nunito-bold text-[11px]">{item.faculty}</Text>
+                                            </View>
+                                        </View>
+
+                                        <View className="items-end">
+                                            <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">Ratio</Text>
+                                            <Text className="text-[#1E293B] font-nunito-extrabold text-xs">
+                                                {item.attended} / {item.delivered}
+                                            </Text>
                                         </View>
                                     </View>
                                 </View>
+                            </TouchableOpacity>
+                        ))}
+
+                        {filteredAttendance.length === 0 && (
+                            <View className="items-center justify-center py-20">
+                                <View className="w-20 h-20 bg-gray-50 rounded-full items-center justify-center mb-4">
+                                    <Ionicons name="calendar-outline" size={32} color="#CBD5E1" />
+                                </View>
+                                <Text className="text-gray-400 font-nunito-bold">No records found</Text>
                             </View>
-
-                            {/* Card Bottom Section (Standard academic info) */}
-                            <View className="bg-blue-50/50 px-5 py-3 flex-row justify-between items-center">
-                                <View className="flex-row items-center">
-                                    <Text className="text-blue-400 font-nunito-bold text-[10px] uppercase">Section: </Text>
-                                    <Text className="text-blue-600 font-nunito-bold text-[10px]">{item.section}</Text>
-                                </View>
-                                <View className="flex-row items-center">
-                                    <Text className="text-orange-400 font-nunito-bold text-[10px] uppercase">Roll No: </Text>
-                                    <Text className="text-orange-600 font-nunito-bold text-[10px]">{item.rollNo}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
+                        )}
+                    </View>
+                </ScrollView>
+            </View>
         </View>
     );
 }
+

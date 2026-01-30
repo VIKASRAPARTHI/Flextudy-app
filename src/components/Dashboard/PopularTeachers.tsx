@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const teachers = [
     {
@@ -9,16 +9,16 @@ const teachers = [
         name: 'Shohag Hasan',
         subject: 'Mathematics',
         location: 'Uttara, Sector 06, Dhaka',
-        rating: 5,
+        rating: 5.0,
         students: '1.2k',
         image: 'https://i.pravatar.cc/150?img=11'
     },
     {
         id: 2,
         name: 'Hridoy Ahmed',
-        subject: 'English',
+        subject: 'English Language',
         location: 'Gulshan 02, Dhaka',
-        rating: 4.5,
+        rating: 4.8,
         students: '850',
         image: 'https://i.pravatar.cc/150?img=12'
     },
@@ -27,197 +27,55 @@ const teachers = [
 export default function PopularTeachers() {
     const router = useRouter();
 
-    const renderStars = (rating: number) => {
-        return (
-            <View style={styles.ratingRow}>
-                <Ionicons name="star" size={14} color="#F59E0B" />
-                <Text style={styles.ratingText}>{rating}</Text>
-            </View>
-        );
-    };
-
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Popular Teachers</Text>
+        <View className="mb-8">
+            <View className="flex-row justify-between items-center mb-5">
+                <Text className="text-xl font-nunito-extrabold text-[#1E293B]">Popular Teachers</Text>
                 <TouchableOpacity onPress={() => router.push('/(tabs)/tutors')}>
-                    <Text style={styles.seeAll}>See all</Text>
+                    <Text className="text-sm font-nunito-bold text-[#0061FF]">See all</Text>
                 </TouchableOpacity>
             </View>
 
             {teachers.map((teacher) => (
-                <View key={teacher.id} style={styles.card}>
-                    <View style={styles.avatarContainer}>
-                        <Image source={{ uri: teacher.image }} style={styles.avatar} />
-                        <View style={styles.verifiedBadge}>
+                <TouchableOpacity
+                    key={teacher.id}
+                    className="bg-white rounded-[32px] p-4 flex-row items-center mb-4 border border-gray-100 shadow-sm"
+                    activeOpacity={0.9}
+                    onPress={() => router.push({ pathname: "/tutor/[id]", params: { id: teacher.id } })}
+                >
+                    <View className="relative">
+                        <Image source={{ uri: teacher.image }} className="w-16 h-16 rounded-2xl bg-gray-50" />
+                        <View className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm">
                             <Ionicons name="checkmark-circle" size={14} color="#0061FF" />
                         </View>
                     </View>
 
-                    <View style={styles.info}>
-                        <View style={styles.topRow}>
-                            <Text style={styles.name} numberOfLines={1}>{teacher.name}</Text>
-                            {renderStars(teacher.rating)}
+                    <View className="flex-1 ml-4">
+                        <View className="flex-row justify-between items-center mb-1">
+                            <Text className="text-base font-nunito-bold text-[#1E293B]" numberOfLines={1}>{teacher.name}</Text>
+                            <View className="flex-row items-center bg-orange-50 px-2 py-0.5 rounded-lg border border-orange-100">
+                                <Ionicons name="star" size={12} color="#F59E0B" />
+                                <Text className="text-[11px] font-nunito-extrabold text-orange-600 ml-1">{teacher.rating.toFixed(1)}</Text>
+                            </View>
                         </View>
 
-                        <View style={styles.subjectRow}>
-                            <Text style={styles.subjectText}>{teacher.subject}</Text>
-                            <View style={styles.dot} />
-                            <Text style={styles.studentText}>{teacher.students} Students</Text>
+                        <View className="flex-row items-center mb-2">
+                            <Text className="text-xs font-nunito-semibold text-gray-500">{teacher.subject}</Text>
+                            <View className="w-1 h-1 rounded-full bg-gray-300 mx-2" />
+                            <Text className="text-xs font-nunito-medium text-gray-400">{teacher.students} Students</Text>
                         </View>
 
-                        <View style={styles.locationRow}>
-                            <Ionicons name="location" size={12} color="#9CA3AF" />
-                            <Text style={styles.locationText} numberOfLines={1}>{teacher.location}</Text>
+                        <View className="flex-row items-center">
+                            <Ionicons name="location-outline" size={12} color="#94A3B8" />
+                            <Text className="text-[11px] font-nunito-medium text-gray-400 ml-1" numberOfLines={1}>{teacher.location}</Text>
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.hireButton} activeOpacity={0.8}>
-                        <Text style={styles.hireText}>Hire</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View className="bg-gray-50 w-10 h-10 rounded-full items-center justify-center ml-2 border border-gray-100">
+                        <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+                    </View>
+                </TouchableOpacity>
             ))}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginBottom: 32,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    title: {
-        fontSize: 20,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: '#111827',
-        letterSpacing: -0.5,
-    },
-    seeAll: {
-        fontSize: 14,
-        fontFamily: 'Nunito_700Bold',
-        color: '#0061FF',
-    },
-    card: {
-        backgroundColor: 'white',
-        borderRadius: 24,
-        padding: 18,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-        borderWidth: 1,
-        borderColor: '#F1F5F9',
-        shadowColor: '#0061FF',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 15,
-        elevation: 2,
-    },
-    avatarContainer: {
-        position: 'relative',
-    },
-    avatar: {
-        width: 64,
-        height: 64,
-        borderRadius: 18,
-        backgroundColor: '#F8FAFC',
-    },
-    verifiedBadge: {
-        position: 'absolute',
-        bottom: -4,
-        right: -4,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-    info: {
-        flex: 1,
-        marginLeft: 16,
-    },
-    topRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 4,
-    },
-    name: {
-        fontSize: 16,
-        fontFamily: 'Nunito_700Bold',
-        color: '#1E293B',
-        flex: 1,
-        marginRight: 8,
-    },
-    ratingRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#FFFBEB',
-        paddingHorizontal: 8,
-        paddingVertical: 3,
-        borderRadius: 10,
-    },
-    ratingText: {
-        fontSize: 12,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: '#D97706',
-        marginLeft: 4,
-    },
-    subjectRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 6,
-    },
-    subjectText: {
-        fontSize: 13,
-        fontFamily: 'Nunito_600SemiBold',
-        color: '#475569',
-    },
-    dot: {
-        width: 3,
-        height: 3,
-        borderRadius: 1.5,
-        backgroundColor: '#94A3B8',
-        marginHorizontal: 6,
-    },
-    studentText: {
-        fontSize: 12,
-        fontFamily: 'Nunito_500Medium',
-        color: '#64748B',
-    },
-    locationRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    locationText: {
-        fontSize: 12,
-        fontFamily: 'Nunito_500Medium',
-        color: '#94A3B8',
-        marginLeft: 4,
-        maxWidth: 140,
-    },
-    hireButton: {
-        backgroundColor: '#0061FF',
-        paddingHorizontal: 18,
-        paddingVertical: 10,
-        borderRadius: 14,
-        marginLeft: 12,
-        shadowColor: '#0061FF',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 10,
-        elevation: 3,
-    },
-    hireText: {
-        color: 'white',
-        fontSize: 14,
-        fontFamily: 'Nunito_700Bold',
-    },
-});

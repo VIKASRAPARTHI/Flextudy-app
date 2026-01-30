@@ -1,7 +1,7 @@
+import CourseCard, { CourseItem } from '@/components/Courses/CourseCard';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { router } from 'expo-router';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
     FlatList,
     StatusBar,
@@ -10,8 +10,6 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-
-import CourseCard, { CourseItem } from '@/components/Courses/CourseCard';
 
 const TABS = ['All Courses', 'My courses'];
 
@@ -78,72 +76,66 @@ const MY_COURSES: CourseItem[] = [
 ];
 
 export default function CoursesScreen() {
-    const router = useRouter();
     const [activeTab, setActiveTab] = useState('All Courses');
 
-    const renderItem = ({ item }: { item: CourseItem }) => (
+    const renderItem = useCallback(({ item }: { item: CourseItem }) => (
         <CourseCard item={item} />
-    );
+    ), []);
+
+    const data = useMemo(() => {
+        return activeTab === 'All Courses' ? ALL_COURSES : MY_COURSES;
+    }, [activeTab]);
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" />
 
-            <LinearGradient
-                colors={['#0061FF', '#F0F9FF', '#FFFFFF']}
-                locations={[0, 0.3, 0.6]}
-                style={StyleSheet.absoluteFill}
-            />
+            {/* Sticky Header */}
+            <View className="px-6 pt-12 pb-6 flex-row items-center justify-between bg-[#0061FF]">
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                >
+                    <Ionicons name="chevron-back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text className="text-xl font-nunito-extrabold text-white">Courses</Text>
+                <TouchableOpacity className="w-10 h-10 items-center justify-center bg-white/20 rounded-full">
+                    <Ionicons name="search-outline" size={22} color="white" />
+                </TouchableOpacity>
+            </View>
 
-            <View style={styles.safeArea}>
-                <View style={[styles.content, { paddingTop: 48 }]}>
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <TouchableOpacity
-                            onPress={() => router.back()}
-                            style={styles.backButton}
-                        >
-                            <Ionicons name="chevron-back" size={24} color="white" />
-                        </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Courses</Text>
-                        <TouchableOpacity style={styles.searchButton}>
-                            <Ionicons name="search-outline" size={24} color="white" />
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Tab Selector */}
-                    <View style={styles.tabContainer}>
-                        {TABS.map((tab) => (
-                            <TouchableOpacity
-                                key={tab}
-                                style={[
-                                    styles.tab,
-                                    activeTab === tab && styles.activeTab
-                                ]}
-                                onPress={() => setActiveTab(tab)}
-                            >
-                                <Text style={[
-                                    styles.tabText,
-                                    activeTab === tab && styles.activeTabText
-                                ]}>
-                                    {tab}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {/* Grid */}
-                    <View style={styles.sheet}>
-                        <FlatList
-                            data={activeTab === 'All Courses' ? ALL_COURSES : MY_COURSES}
-                            renderItem={renderItem}
-                            keyExtractor={(item) => item.id}
-                            numColumns={2}
-                            contentContainerStyle={styles.listContent}
-                            showsVerticalScrollIndicator={false}
-                        />
+            <View style={styles.contentContainer}>
+                {/* Tab Selector */}
+                <View className="px-6 pt-8 pb-4">
+                    <View style={styles.tabBar}>
+                        {TABS.map((tab) => {
+                            const isActive = activeTab === tab;
+                            return (
+                                <TouchableOpacity
+                                    key={tab}
+                                    style={[styles.tabItem, isActive && styles.activeTabItem]}
+                                    onPress={() => setActiveTab(tab)}
+                                    activeOpacity={0.7}
+                                >
+                                    <Text style={[styles.tabText, isActive && styles.activeTabText]}>
+                                        {tab}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })}
                     </View>
                 </View>
+
+                {/* Courses List */}
+                <FlatList
+                    key={activeTab} // Using key to force clean remount which often avoids context state issues
+                    data={data}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
+                    numColumns={2}
+                    contentContainerStyle={styles.listContent}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
         </View>
     );
@@ -152,77 +144,48 @@ export default function CoursesScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#0061FF',
     },
-    safeArea: {
+    contentContainer: {
         flex: 1,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        overflow: 'hidden',
     },
-    content: {
-        flex: 1,
-        paddingTop: 30,
-    },
-    header: {
+    tabBar: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        marginBottom: 24,
-    },
-    backButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerTitle: {
-        fontSize: 22,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: 'white',
-    },
-    searchButton: {
-        width: 40,
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabContainer: {
-        flexDirection: 'row',
-        backgroundColor: 'rgba(255,255,255,0.15)',
-        marginHorizontal: 20,
-        padding: 6,
+        backgroundColor: '#F8FAFC',
+        padding: 4,
         borderRadius: 20,
-        marginBottom: 24,
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.1)',
+        borderColor: '#F1F5F9',
     },
-    tab: {
+    tabItem: {
         flex: 1,
         paddingVertical: 12,
         borderRadius: 16,
         alignItems: 'center',
     },
-    activeTab: {
+    activeTabItem: {
         backgroundColor: 'white',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 2,
     },
     tabText: {
         fontSize: 14,
         fontFamily: 'Nunito_700Bold',
-        color: 'white',
+        color: '#94A3B8',
     },
     activeTabText: {
         color: '#0061FF',
     },
-    sheet: {
-        flex: 1,
-        backgroundColor: 'white',
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        paddingTop: 20,
-    },
     listContent: {
         paddingHorizontal: 12,
         paddingBottom: 40,
-    },
+        paddingTop: 10,
+    }
 });

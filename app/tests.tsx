@@ -14,7 +14,7 @@ const TEST_ITEMS = [
         status: 'Upcoming',
         icon: 'calculator',
         color: '#E0F2FE',
-        iconColor: '#0369A1'
+        iconColor: '#0061FF'
     },
     {
         id: '2',
@@ -24,8 +24,8 @@ const TEST_ITEMS = [
         subject: 'Classical Mechanics',
         status: 'Upcoming',
         icon: 'flash',
-        color: '#FEF3C7',
-        iconColor: '#B45309'
+        color: '#FFF7ED',
+        iconColor: '#F59E0B'
     },
     {
         id: '3',
@@ -36,8 +36,8 @@ const TEST_ITEMS = [
         status: 'Completed',
         score: '85/100',
         icon: 'flask',
-        color: '#DCFCE7',
-        iconColor: '#15803D'
+        color: '#EFF6FF',
+        iconColor: '#0061FF'
     },
     {
         id: '4',
@@ -48,8 +48,8 @@ const TEST_ITEMS = [
         status: 'Completed',
         score: '92/100',
         icon: 'book',
-        color: '#F3E8FF',
-        iconColor: '#7E22CE'
+        color: '#FFF7ED',
+        iconColor: '#F59E0B'
     },
 ];
 
@@ -138,158 +138,149 @@ export default function TestsScreen() {
             case 'Upcoming':
                 return 'bg-blue-100 text-blue-700';
             case 'Completed':
-                return 'bg-green-100 text-green-700';
+                return 'bg-blue-50 text-blue-600';
             case 'In Progress':
-                return 'bg-orange-100 text-orange-700';
+                return 'bg-orange-50 text-orange-600';
             default:
                 return 'bg-gray-100 text-gray-700';
         }
     };
 
     return (
-        <View className="flex-1 bg-[#F8FAFC]">
-            <StatusBar barStyle="dark-content" />
+        <View className="flex-1 bg-[#0061FF]">
+            <StatusBar barStyle="light-content" />
 
-            {/* Header */}
-            <View className="px-6 pt-12 pb-4">
-                <TouchableOpacity onPress={() => router.back()} className="mb-6 w-10 h-10 items-center justify-center bg-white rounded-full shadow-sm">
-                    <Ionicons name="chevron-back" size={24} color="#1E293B" />
-                </TouchableOpacity>
-                <View className="flex-row justify-between items-center">
-                    <Text className="text-3xl font-nunito-extrabold text-[#1E293B]">Tests & Exams</Text>
-                    <TouchableOpacity
-                        onPress={() => setShowMonthPicker(true)}
-                        className="w-10 h-10 items-center justify-center bg-white rounded-full shadow-sm"
-                    >
-                        <Ionicons name="calendar-outline" size={22} color="#0061FF" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* Date Selection */}
-            <View className="mt-4">
-                <View className="px-6 flex-row justify-between items-center mb-4">
-                    <Text className="text-xl font-nunito-extrabold text-[#1E293B]">{selectedDateStr}</Text>
-                    <TouchableOpacity className="flex-row items-center bg-white px-3 py-1.5 rounded-full shadow-sm">
-                        <Text className="text-xs font-nunito-bold text-[#0061FF]">Today</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 20 }}
+            {/* Sticky Header */}
+            <View className="px-6 pt-12 pb-6 flex-row items-center justify-between">
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
                 >
-                    {weekDates.map((item, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={() => setSelectedDateIndex(index)}
-                            className="mr-3 items-center"
-                        >
-                            {selectedDateIndex === index ? (
-                                <LinearGradient
-                                    colors={['#0061FF', '#60A5FA']}
-                                    className="w-14 h-[80px] rounded-[28px] items-center justify-center shadow-lg shadow-blue-500/30"
-                                >
-                                    <Text className="text-white/80 text-xs font-nunito-medium mb-1">{item.day}</Text>
-                                    <Text className="text-white text-lg font-nunito-extrabold">{item.date}</Text>
-                                    <View className="w-1.5 h-1.5 bg-white rounded-full mt-1" />
-                                </LinearGradient>
-                            ) : (
-                                <View className="w-14 h-[80px] rounded-[28px] bg-white items-center justify-center border border-gray-100 shadow-sm">
-                                    <Text className="text-gray-400 text-xs font-nunito-medium mb-1">{item.day}</Text>
-                                    <Text className="text-[#1E293B] text-lg font-nunito-bold">{item.date}</Text>
-                                    {item.isToday && <View className="w-1 h-1 bg-blue-400 rounded-full mt-1" />}
-                                </View>
-                            )}
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+                    <Ionicons name="chevron-back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text className="text-xl font-nunito-extrabold text-white">Tests & Exams</Text>
+                <TouchableOpacity
+                    onPress={() => setShowMonthPicker(true)}
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                >
+                    <Ionicons name="calendar-outline" size={22} color="white" />
+                </TouchableOpacity>
             </View>
 
-            {/* Timeline Section - Only this part scrolls */}
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-                <View className="px-6 mt-4 pb-10">
-                    <View className="flex-row justify-between items-center mb-6">
-                        <View>
-                            <Text className="text-lg font-nunito-extrabold text-[#1E293B]">Test Timeline</Text>
-                            <Text className="text-gray-400 font-nunito-medium text-xs">Based on selected date</Text>
-                        </View>
-                        <View className="flex-row space-x-2">
+            <View className="flex-1 bg-white rounded-t-[40px] shadow-2xl overflow-hidden">
+                {/* Fixed Date Selection Section */}
+                <View className="pt-[30px] pb-2">
+                    <View className="px-6 flex-row justify-between items-center mb-6">
+                        <Text className="text-xl font-nunito-extrabold text-[#1E293B]">{selectedDateStr}</Text>
+                        <TouchableOpacity className="flex-row items-center bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-full">
+                            <Text className="text-xs font-nunito-bold text-[#0061FF]">Today</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View className="mb-4">
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ paddingHorizontal: 24 }}
+                        >
+                            {weekDates.map((item, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    onPress={() => setSelectedDateIndex(index)}
+                                    className="mr-3 items-center"
+                                >
+                                    {selectedDateIndex === index ? (
+                                        <LinearGradient
+                                            colors={['#0061FF', '#60A5FA']}
+                                            className="w-14 h-[80px] rounded-[28px] items-center justify-center shadow-lg shadow-blue-500/30"
+                                        >
+                                            <Text className="text-white/80 text-xs font-nunito-medium mb-1">{item.day}</Text>
+                                            <Text className="text-white text-lg font-nunito-extrabold">{item.date}</Text>
+                                            <View className="w-1.5 h-1.5 bg-white rounded-full mt-1" />
+                                        </LinearGradient>
+                                    ) : (
+                                        <View className="w-14 h-[80px] rounded-[28px] bg-gray-50 items-center justify-center border border-gray-100">
+                                            <Text className="text-gray-400 text-xs font-nunito-medium mb-1">{item.day}</Text>
+                                            <Text className="text-[#1E293B] text-lg font-nunito-bold">{item.date}</Text>
+                                            {item.isToday && <View className="w-1 h-1 bg-blue-400 rounded-full mt-1" />}
+                                        </View>
+                                    )}
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </View>
+                </View>
+
+                {/* Scrollable Timeline Section */}
+                <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, paddingTop: 10 }}>
+                    <View className="px-6 mt-4">
+                        <View className="flex-row justify-between items-center mb-8">
+                            <View>
+                                <Text className="text-lg font-nunito-extrabold text-[#1E293B]">Test Timeline</Text>
+                                <Text className="text-gray-400 font-nunito-medium text-xs">Based on selected date</Text>
+                            </View>
                             <View className="bg-blue-50 px-3 py-1 rounded-lg">
                                 <Text className="text-[10px] font-nunito-bold text-blue-600">4 TESTS</Text>
                             </View>
                         </View>
-                    </View>
 
-                    {TEST_ITEMS.map((item, index) => (
-                        <View key={item.id} className="flex-row mb-6">
-                            {/* Time Vertical Column */}
-                            <View className="w-16 items-center pt-2">
-                                <Text className="text-[#1E293B] font-nunito-extrabold text-sm">{item.time}</Text>
-                                <View className="w-px flex-1 bg-gray-200 my-2 relative">
-                                    {index !== TEST_ITEMS.length - 1 && (
-                                        <View className="absolute bottom-0 w-2 h-2 rounded-full bg-gray-200 -left-[3.5px]" />
-                                    )}
-                                </View>
-                            </View>
-
-                            {/* Test Card */}
-                            <View className="flex-1 bg-white rounded-3xl p-5 shadow-sm border border-gray-50 relative overflow-hidden">
-                                {item.status === 'Completed' && (
-                                    <View className="absolute -right-12 -top-12 w-24 h-24 bg-green-50 rounded-full opacity-20" />
-                                )}
-
-                                <View className="flex-row items-center justify-between mb-3">
-                                    <View style={{ backgroundColor: item.color }} className="w-12 h-12 rounded-2xl items-center justify-center">
-                                        <Ionicons name={item.icon as any} size={24} color={item.iconColor} />
-                                    </View>
-                                    <View className={`px-3 py-1 rounded-full ${getStatusStyle(item.status)}`}>
-                                        <Text className="text-[10px] font-nunito-bold uppercase tracking-wider">{item.status}</Text>
+                        {TEST_ITEMS.map((item, index) => (
+                            <View key={item.id} className="flex-row mb-8">
+                                {/* Time Vertical Column */}
+                                <View className="w-16 items-center pt-2">
+                                    <Text className="text-[#1E293B] font-nunito-extrabold text-sm">{item.time}</Text>
+                                    <View className="w-px flex-1 bg-gray-100 my-2 relative">
+                                        {index !== TEST_ITEMS.length - 1 && (
+                                            <View className="absolute bottom-0 w-2 h-2 rounded-full bg-gray-100 -left-[3.5px]" />
+                                        )}
                                     </View>
                                 </View>
 
-                                <View className="mb-4">
-                                    <Text className="text-lg font-nunito-extrabold text-[#1E293B] mb-1">{item.title}</Text>
-                                    <View className="flex-row items-center">
-                                        <Ionicons name="book-outline" size={14} color="#64748B" className="mr-1" />
-                                        <Text className="text-gray-500 font-nunito-medium text-xs ml-1">{item.subject}</Text>
-                                    </View>
-                                </View>
-
-                                <View className="flex-row items-center justify-between pt-4 border-t border-gray-50">
-                                    <View className="flex-row items-center">
-                                        <Ionicons name="time-outline" size={16} color="#94A3B8" />
-                                        <Text className="text-gray-400 font-nunito-bold text-xs ml-1">{item.duration}</Text>
-                                    </View>
-
-                                    {item.status === 'Completed' ? (
-                                        <View className="flex-row items-center">
-                                            <Text className="text-gray-400 font-nunito-medium text-xs mr-2">Score:</Text>
-                                            <Text className="text-green-600 font-nunito-extrabold text-sm">{item.score}</Text>
+                                {/* Test Card */}
+                                <View className="flex-1 bg-white rounded-[32px] p-5 shadow-sm border border-gray-100 relative overflow-hidden">
+                                    <View className="flex-row items-center justify-between mb-4">
+                                        <View style={{ backgroundColor: item.color }} className="w-12 h-12 rounded-2xl items-center justify-center">
+                                            <Ionicons name={item.icon as any} size={24} color={item.iconColor} />
                                         </View>
-                                    ) : (
-                                        <TouchableOpacity
-                                            onPress={() => router.push({ pathname: "/test-details/[id]", params: { id: item.id } })}
-                                            className="bg-[#1E293B] px-4 py-2 rounded-xl"
-                                        >
-                                            <Text className="text-white font-nunito-bold text-xs">Details</Text>
-                                        </TouchableOpacity>
-                                    )}
+                                        <View className={`px-3 py-1 rounded-full ${getStatusStyle(item.status)}`}>
+                                            <Text className="text-[10px] font-nunito-bold uppercase tracking-wider">{item.status}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View className="mb-4">
+                                        <Text className="text-lg font-nunito-extrabold text-[#1E293B] mb-1">{item.title}</Text>
+                                        <View className="flex-row items-center">
+                                            <Ionicons name="book-outline" size={14} color="#64748B" />
+                                            <Text className="text-gray-500 font-nunito-medium text-xs ml-1">{item.subject}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View className="flex-row items-center justify-between pt-4 border-t border-gray-50">
+                                        <View className="flex-row items-center">
+                                            <Ionicons name="time-outline" size={16} color="#94A3B8" />
+                                            <Text className="text-gray-400 font-nunito-bold text-xs ml-1">{item.duration}</Text>
+                                        </View>
+
+                                        {item.status === 'Completed' ? (
+                                            <View className="flex-row items-center">
+                                                <Text className="text-gray-400 font-nunito-medium text-xs mr-2">Score:</Text>
+                                                <Text className="text-[#0061FF] font-nunito-extrabold text-sm">{item.score}</Text>
+                                            </View>
+                                        ) : (
+                                            <TouchableOpacity
+                                                onPress={() => router.push({ pathname: "/test-details/[id]", params: { id: item.id } })}
+                                                className="bg-[#1E293B] px-4 py-2 rounded-xl"
+                                            >
+                                                <Text className="text-white font-nunito-bold text-xs">Details</Text>
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    ))}
-
-                    {/* End of Timeline indicator */}
-                    <View className="flex-row items-center opacity-40">
-                        <View className="w-16 items-center">
-                            <Ionicons name="ellipse" size={8} color="#CBD5E1" />
-                        </View>
-                        <View className="flex-1 h-px bg-gray-200" />
+                        ))}
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
 
             {/* Month Picker Modal */}
             {showMonthPicker && (
