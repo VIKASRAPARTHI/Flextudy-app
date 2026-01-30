@@ -49,126 +49,113 @@ const PAYMENTS_DATA = [
 export default function PaymentsScreen() {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeTab, setActiveTab] = useState('All');
+
+    const tabs = ['All', 'Paid', 'Due'];
+
+    const filteredPayments = PAYMENTS_DATA.filter(item => {
+        const matchesSearch = item.invoiceNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.month.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesTab = activeTab === 'All' || item.status === activeTab.toUpperCase();
+        return matchesSearch && matchesTab;
+    });
 
     return (
-        <View className="flex-1 bg-[#F8FAFC]">
-            <StatusBar barStyle="dark-content" />
+        <View className="flex-1 bg-[#0061FF]">
+            <StatusBar barStyle="light-content" />
 
-            {/* Header */}
-            <View className="px-6 pt-12 pb-4 flex-row items-center justify-between bg-white">
-                <TouchableOpacity
-                    onPress={() => router.back()}
-                    className="w-10 h-10 items-center justify-center bg-gray-50 rounded-full"
-                >
-                    <Ionicons name="chevron-back" size={24} color="#1E293B" />
-                </TouchableOpacity>
-                <Text className="text-xl font-nunito-extrabold text-[#1E293B]">Payment History</Text>
-                <TouchableOpacity className="w-10 h-10 items-center justify-center">
-                    <Ionicons name="menu-outline" size={24} color="#1E293B" />
-                </TouchableOpacity>
+            {/* Sticky Header */}
+            <View className="px-6 pt-12 pb-6">
+                <View className="flex-row items-center justify-between mb-6">
+                    <TouchableOpacity
+                        onPress={() => router.back()}
+                        className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                    >
+                        <Ionicons name="chevron-back" size={24} color="white" />
+                    </TouchableOpacity>
+                    <Text className="text-xl font-nunito-extrabold text-white">Payment History</Text>
+                    <View className="w-10" />
+                </View>
+
+                {/* Search Bar in Header */}
+                <View className="bg-white/10 rounded-2xl flex-row items-center px-4 py-2.5 border border-white/20 backdrop-blur-xl">
+                    <Ionicons name="search-outline" size={18} color="white" />
+                    <TextInput
+                        placeholder="Search invoice, month..."
+                        placeholderTextColor="rgba(255,255,255,0.6)"
+                        className="flex-1 ml-3 font-nunito-semibold text-sm text-white"
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                    />
+                </View>
             </View>
 
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-                {/* Search Bar */}
-                <View className="px-6 mt-6">
-                    <View className="bg-white rounded-2xl flex-row items-center px-4 py-3 border border-gray-100 shadow-sm">
-                        <Ionicons name="search-outline" size={20} color="#94A3B8" />
-                        <TextInput
-                            placeholder="Search invoice, month..."
-                            placeholderTextColor="#94A3B8"
-                            className="flex-1 ml-3 font-nunito-medium text-sm text-[#1E293B]"
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
-                        />
-                    </View>
-                </View>
+            <View className="flex-1 bg-white rounded-t-[40px] shadow-2xl overflow-hidden">
+                <ScrollView
+                    className="flex-1"
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 40, paddingTop: 30 }}
+                >
+                    <View className="px-6">
+                        {/* Tabs */}
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mb-8 overflow-visible">
+                            {tabs.map((tab) => (
+                                <TouchableOpacity
+                                    key={tab}
+                                    onPress={() => setActiveTab(tab)}
+                                    className={`mr-3 px-6 py-2.5 rounded-xl ${activeTab === tab ? 'bg-[#0061FF]' : 'bg-gray-50'}`}
+                                >
+                                    <Text className={`font-nunito-bold text-xs ${activeTab === tab ? 'text-white' : 'text-gray-400'}`}>
+                                        {tab}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
 
-                {/* Legend/Info Section (Optional but good for UX) */}
-                <View className="px-6 mt-6 flex-row items-center justify-between">
-                    <Text className="text-[#1E293B] font-nunito-extrabold text-sm tracking-wider uppercase">Transactions</Text>
-                    <View className="flex-row items-center">
-                        <View className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-                        <Text className="text-gray-400 font-nunito-bold text-[10px] uppercase mr-4">Paid</Text>
-                        <View className="w-2 h-2 rounded-full bg-red-500 mr-2" />
-                        <Text className="text-gray-400 font-nunito-bold text-[10px] uppercase">Due</Text>
-                    </View>
-                </View>
+                        {/* Transaction List */}
+                        <Text className="text-[#1E293B] font-nunito-extrabold text-lg mb-6">Transactions</Text>
 
-                {/* Payment Cards */}
-                <View className="px-6 mt-4">
-                    {PAYMENTS_DATA.map((item) => (
-                        <View key={item.id} className="bg-white rounded-[32px] mb-6 shadow-sm border border-gray-50 overflow-hidden">
-                            {/* Top Section with Ribbon */}
-                            <View className="p-6 border-b border-gray-50">
-                                <View className="flex-row justify-between items-center mb-6">
-                                    <View className="flex-row items-center">
-                                        {/* Status Ribbon/Badge Styled as per image */}
-                                        <View className={`flex-row items-center px-3 py-1.5 rounded-xl mr-4 ${item.status === 'PAID' ? 'bg-green-50' : 'bg-red-50'}`}>
-                                            <Ionicons
-                                                name={item.status === 'PAID' ? 'checkmark-circle' : 'alert-circle'}
-                                                size={18}
-                                                color={item.status === 'PAID' ? '#10B981' : '#EF4444'}
-                                            />
-                                            <Text className={`ml-2 font-nunito-extrabold text-xs ${item.status === 'PAID' ? 'text-green-600' : 'text-red-600'}`}>
-                                                {item.status}
-                                            </Text>
-                                        </View>
+                        {filteredPayments.map((item) => (
+                            <View key={item.id} className="bg-white rounded-[32px] mb-6 shadow-sm border border-gray-100 overflow-hidden flex-row">
+                                <View className={`w-1.5 h-full ${item.status === 'PAID' ? 'bg-[#0061FF]' : 'bg-[#F59E0B]'}`} />
+                                <View className="flex-1 p-6">
+                                    <View className="flex-row justify-between items-start mb-4">
                                         <View>
-                                            <Text className="text-gray-400 font-nunito-bold text-[10px] uppercase tracking-wider">Invoice Receipt</Text>
-                                            <Text className="text-[#1E293B] font-nunito-extrabold text-base">{item.invoiceNo}</Text>
+                                            <View className="flex-row items-center mb-1">
+                                                <Text className="text-gray-400 font-nunito-bold text-[10px] uppercase tracking-wider">{item.category}</Text>
+                                                <View className={`w-1.5 h-1.5 rounded-full mx-2 ${item.status === 'PAID' ? 'bg-blue-400' : 'bg-orange-400'}`} />
+                                                <Text className={`font-nunito-bold text-[10px] uppercase ${item.status === 'PAID' ? 'text-blue-600' : 'text-orange-600'}`}>{item.status}</Text>
+                                            </View>
+                                            <Text className="text-[#1E293B] font-nunito-extrabold text-lg">{item.invoiceNo}</Text>
                                         </View>
-                                    </View>
-                                    <TouchableOpacity className="w-10 h-10 bg-blue-50 rounded-2xl items-center justify-center">
-                                        <Ionicons name="download-outline" size={20} color="#0061FF" />
-                                    </TouchableOpacity>
-                                </View>
-
-                                {/* Metadata Grid */}
-                                <View className="flex-row justify-between">
-                                    <View className="items-center flex-1">
-                                        <View className="w-10 h-10 bg-gray-50 rounded-xl items-center justify-center mb-2">
-                                            <Ionicons name="calendar-outline" size={18} color="#64748B" />
-                                        </View>
-                                        <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">Month</Text>
-                                        <Text className="text-[#1E293B] font-nunito-extrabold text-[11px] mt-0.5">{item.month}</Text>
+                                        <Text className="text-[#1E293B] font-nunito-extrabold text-lg">{item.amount}</Text>
                                     </View>
 
-                                    <View className="h-10 w-px bg-gray-100 self-center" />
-
-                                    <View className="items-center flex-1">
-                                        <View className="w-10 h-10 bg-gray-50 rounded-xl items-center justify-center mb-2">
-                                            <Ionicons name="pricetag-outline" size={18} color="#64748B" />
+                                    <View className="flex-row justify-between items-center pt-3 border-t border-gray-50">
+                                        <View className="flex-row items-center">
+                                            <Ionicons name="calendar-outline" size={14} color="#94A3B8" />
+                                            <Text className="text-gray-500 font-nunito-bold text-xs ml-1.5">{item.month} {item.date}</Text>
                                         </View>
-                                        <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">Category</Text>
-                                        <Text className="text-[#1E293B] font-nunito-extrabold text-[11px] mt-0.5">{item.category}</Text>
-                                    </View>
-
-                                    <View className="h-10 w-px bg-gray-100 self-center" />
-
-                                    <View className="items-center flex-1">
-                                        <View className="w-10 h-10 bg-gray-50 rounded-xl items-center justify-center mb-2">
-                                            <Ionicons name="time-outline" size={18} color="#64748B" />
-                                        </View>
-                                        <Text className="text-gray-400 font-nunito-bold text-[8px] uppercase">{item.status === 'PAID' ? 'Paid Date' : 'Date Over'}</Text>
-                                        <Text className="text-[#1E293B] font-nunito-extrabold text-[11px] mt-0.5">{item.date}</Text>
-                                        <Text className="text-gray-300 font-nunito-bold text-[9px]">{item.time}</Text>
+                                        <TouchableOpacity className="flex-row items-center">
+                                            <Text className="text-[#0061FF] font-nunito-bold text-xs mr-1">Receipt</Text>
+                                            <Ionicons name="download-outline" size={14} color="#0061FF" />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
+                        ))}
 
-                            {/* Optional Bottom Action Area */}
-                            <TouchableOpacity
-                                className={`py-4 items-center justify-center ${item.status === 'PAID' ? 'bg-green-50/50' : 'bg-red-50/50'}`}
-                                activeOpacity={0.7}
-                            >
-                                <Text className={`font-nunito-extrabold text-xs ${item.status === 'PAID' ? 'text-green-600' : 'text-red-600'}`}>
-                                    {item.status === 'PAID' ? 'View Details' : 'Pay Now'}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                </View>
-            </ScrollView>
+                        {filteredPayments.length === 0 && (
+                            <View className="items-center justify-center py-20">
+                                <View className="w-20 h-20 bg-gray-50 rounded-full items-center justify-center mb-4">
+                                    <Ionicons name="receipt-outline" size={32} color="#CBD5E1" />
+                                </View>
+                                <Text className="text-gray-400 font-nunito-bold">No transactions found</Text>
+                            </View>
+                        )}
+                    </View>
+                </ScrollView>
+            </View>
         </View>
     );
 }

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 const TREND_DATA = [
@@ -14,8 +14,8 @@ const TREND_DATA = [
 ];
 
 const SUBJECT_GROWTH = [
-    { name: 'Mathematics', growth: '+ 10%', status: 'Overachiever', feedback: 'Exeptionally grasp over subject basics', color: '#6366F1' },
-    { name: 'Science', growth: '+ 8%', status: 'Quick Learner', feedback: 'Excellent practical application skills', color: '#06B6D4' },
+    { name: 'Mathematics', growth: '+ 10%', status: 'Overachiever', feedback: 'Exeptionally grasp over subject basics', color: '#0061FF' },
+    { name: 'Science', growth: '+ 8%', status: 'Quick Learner', feedback: 'Excellent practical application skills', color: '#F59E0B' },
 ];
 
 const MARKS_DATA = [
@@ -24,15 +24,15 @@ const MARKS_DATA = [
         date: 'August 22, 2020',
         totalPercentage: '80%',
         status: 'Supplementary (1)',
-        statusColor: '#EF4444',
-        accentColor: '#8B5CF6',
+        statusColor: '#F59E0B',
+        accentColor: '#0061FF',
         subjects: [
-            { name: 'Math', marks: '92/100', result: 'Pass', grade: 'A+', gradeColor: '#3B82F6' },
-            { name: 'Science', marks: '86/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'English', marks: '82/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'Hindi', marks: '90/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'Social. Sc', marks: '32/100', result: 'Fail', grade: 'D', gradeColor: '#EF4444' },
-            { name: 'Comp. Sc', marks: '98/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
+            { name: 'Math', marks: '92/100', result: 'Pass', grade: 'A+', gradeColor: '#0061FF' },
+            { name: 'Science', marks: '86/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'English', marks: '82/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'Hindi', marks: '90/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'Social. Sc', marks: '32/100', result: 'Fail', grade: 'D', gradeColor: '#F59E0B' },
+            { name: 'Comp. Sc', marks: '98/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
         ]
     },
     {
@@ -40,15 +40,15 @@ const MARKS_DATA = [
         date: 'August 22, 2020',
         totalPercentage: '86%',
         status: 'Passed',
-        statusColor: '#10B981',
-        accentColor: '#EC4899',
+        statusColor: '#0061FF',
+        accentColor: '#F59E0B',
         subjects: [
-            { name: 'Math', marks: '92/100', result: 'Pass', grade: 'A+', gradeColor: '#3B82F6' },
-            { name: 'Science', marks: '86/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'English', marks: '82/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'Hindi', marks: '90/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
-            { name: 'Social. Sc', marks: '68/100', result: 'Pass', grade: 'B', gradeColor: '#3B82F6' },
-            { name: 'Comp. Sc', marks: '98/100', result: 'Pass', grade: 'A', gradeColor: '#3B82F6' },
+            { name: 'Math', marks: '92/100', result: 'Pass', grade: 'A+', gradeColor: '#0061FF' },
+            { name: 'Science', marks: '86/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'English', marks: '82/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'Hindi', marks: '90/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
+            { name: 'Social. Sc', marks: '68/100', result: 'Pass', grade: 'B', gradeColor: '#0061FF' },
+            { name: 'Comp. Sc', marks: '98/100', result: 'Pass', grade: 'A', gradeColor: '#0061FF' },
         ]
     }
 ];
@@ -86,14 +86,21 @@ const FEEDBACK_DATA = [
 
 const ACHIEVEMENTS_DATA = [
     { title: 'All India Math Olympiad', date: 'Feb 23, 2021', rank: 'Rank 17', iconColor: '#F59E0B', icon: 'calculator' },
-    { title: 'Cultural Art & Craft Competition', date: 'Feb 23, 2021', rank: 'Rank 1', iconColor: '#22C55E', icon: 'brush' },
-    { title: 'Music Competition', date: 'Feb 23, 2021', rank: 'Rank 3', iconColor: '#8B5CF6', icon: 'musical-notes' },
-    { title: 'Cultural Art & Craft Competition', date: 'Feb 23, 2021', rank: 'Rank 3', iconColor: '#EC4899', icon: 'musical-notes' },
+    { title: 'Cultural Art & Craft Competition', date: 'Feb 23, 2021', rank: 'Rank 1', iconColor: '#0061FF', icon: 'brush' },
+    { title: 'Music Competition', date: 'Feb 23, 2021', rank: 'Rank 3', iconColor: '#F59E0B', icon: 'musical-notes' },
+    { title: 'Cultural Art & Craft Competition', date: 'Feb 23, 2021', rank: 'Rank 3', iconColor: '#0061FF', icon: 'musical-notes' },
 ];
 
 export default function ProgressScreen() {
     const router = useRouter();
+    const params = useLocalSearchParams<{ tab?: string }>();
     const [activeTab, setActiveTab] = useState('Performance');
+
+    useEffect(() => {
+        if (params.tab && ['Marks', 'Performance', 'Feedback', 'Achievement'].includes(params.tab)) {
+            setActiveTab(params.tab);
+        }
+    }, [params.tab]);
 
     const tabs = ['Marks', 'Performance', 'Feedback', 'Achievement'];
 
@@ -133,7 +140,7 @@ export default function ProgressScreen() {
                 <View className="items-center">
                     <View className="w-24 h-24 items-center justify-center">
                         <View className="w-24 h-24 rounded-full border-[6px] border-blue-900/50 absolute" />
-                        <View className="w-24 h-24 rounded-full border-[6px] border-yellow-400 absolute border-t-transparent border-l-transparent" style={{ transform: [{ rotate: '-45deg' }] }} />
+                        <View className="w-24 h-24 rounded-full border-[6px] border-orange-400 absolute border-t-transparent border-l-transparent" style={{ transform: [{ rotate: '-45deg' }] }} />
                         <View className="items-center">
                             <View className="flex-row items-end">
                                 <Text className="text-white font-nunito-extrabold text-lg">75</Text>
@@ -143,7 +150,7 @@ export default function ProgressScreen() {
                         </View>
                     </View>
                     <View className="flex-row items-center mt-4 bg-white/10 px-3 py-1 rounded-full">
-                        <Ionicons name="trophy-outline" size={12} color="#EAB308" />
+                        <Ionicons name="trophy-outline" size={12} color="#F59E0B" />
                         <Text className="text-white font-nunito-extrabold text-[10px] ml-1">Rank 10</Text>
                     </View>
                 </View>
@@ -189,7 +196,7 @@ export default function ProgressScreen() {
             <View className="mb-10">
                 <View className="flex-row items-center justify-between mb-6">
                     <Text className="text-gray-900 font-nunito-extrabold text-lg">Overview</Text>
-                    <Text className="text-green-600 font-nunito-bold text-xs">Total Growth + 1.8%</Text>
+                    <Text className="text-blue-600 font-nunito-bold text-xs">Total Growth + 1.8%</Text>
                 </View>
 
                 <View className="bg-gray-50/50 rounded-[32px] p-6 border border-gray-100">
@@ -224,8 +231,8 @@ export default function ProgressScreen() {
                         <View className="w-24 pt-4">
                             <Text className="text-gray-600 font-nunito-extrabold text-xs mb-2">{subject.name}</Text>
                             <View className="flex-row items-center">
-                                <Ionicons name="trending-up" size={16} color="#10B981" />
-                                <Text className="text-green-600 font-nunito-bold text-xs ml-1">{subject.growth}</Text>
+                                <Ionicons name="trending-up" size={16} color="#0061FF" />
+                                <Text className="text-blue-600 font-nunito-bold text-xs ml-1">{subject.growth}</Text>
                             </View>
                         </View>
 

@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export interface CourseItem {
     id: string;
@@ -21,29 +22,33 @@ interface CourseCardProps {
     item: CourseItem;
 }
 
-import { useRouter } from 'expo-router';
-
-export default function CourseCard({ item }: CourseCardProps) {
-    const router = useRouter();
-
+const CourseCard = ({ item }: CourseCardProps) => {
     if (item.isAddButton) {
         return (
-            <TouchableOpacity style={styles.addCard} activeOpacity={0.8}>
-                <View style={styles.plusIconContainer}>
-                    <Ionicons name="add" size={32} color="white" />
+            <TouchableOpacity
+                style={styles.addCard}
+                activeOpacity={0.8}
+            >
+                <View style={styles.addIconContainer}>
+                    <Ionicons name="add" size={28} color="white" />
                 </View>
-                <Text style={styles.addText}>Add a new course</Text>
+                <Text style={styles.addText}>Add Course</Text>
             </TouchableOpacity>
         );
     }
 
     const handlePress = () => {
         if (item.isOwned) {
-            router.push(`/course-guide/${item.id}?owned=true` as any);
+            router.push(`/course-guide/${item.id}?owned=true`);
         } else {
-            router.push(`/course-details/${item.id}` as any);
+            router.push(`/course-details/${item.id}`);
         }
     };
+
+    const accentColor = item.bgColor === '#FFF7ED' ? '#F59E0B' :
+        item.bgColor === '#EFF6FF' ? '#0061FF' :
+            item.bgColor === '#FEFCE8' ? '#EAB308' :
+                item.bgColor === '#F0FDF4' ? '#10B981' : '#0061FF';
 
     return (
         <TouchableOpacity
@@ -51,121 +56,156 @@ export default function CourseCard({ item }: CourseCardProps) {
             activeOpacity={0.9}
             onPress={handlePress}
         >
-            <View style={[styles.cardContent, { backgroundColor: item.bgColor }]}>
-                <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
-
-                <View style={styles.detailsContainer}>
-                    <Text style={styles.detailText}>{item.stats}</Text>
-                    <Text style={styles.detailText}>{item.module}</Text>
-                    <Text style={styles.detailText}>{item.type}</Text>
-                </View>
-
-                {item.icon && (
-                    <View style={styles.iconContainer}>
-                        <Ionicons name={item.icon} size={48} color="rgba(0,0,0,0.15)" />
+            <View style={[styles.topSection, { backgroundColor: item.bgColor }]}>
+                {item.isOwned && (
+                    <View style={styles.ownedBadge}>
+                        <Text style={styles.ownedText}>OWNED</Text>
                     </View>
                 )}
 
-                {item.image && (
-                    <Image source={item.image} style={styles.cardImage} resizeMode="contain" />
-                )}
+                <Text style={styles.title} numberOfLines={2}>
+                    {item.title}
+                </Text>
+
+                <View style={styles.statsContainer}>
+                    <View style={styles.statRow}>
+                        <Ionicons name="videocam-outline" size={10} color="#475569" style={{ opacity: 0.6 }} />
+                        <Text style={styles.statText}>{item.stats}</Text>
+                    </View>
+                    <View style={styles.statRow}>
+                        <Ionicons name="layers-outline" size={10} color="#475569" style={{ opacity: 0.6 }} />
+                        <Text style={styles.statText} numberOfLines={1}>{item.module}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.floatingIcon}>
+                    <Ionicons name={item.icon || 'book-outline'} size={32} color={accentColor} style={{ opacity: 0.15 }} />
+                </View>
             </View>
 
-            <View style={styles.footer}>
-                <Text style={styles.footerTitle}>{item.description}</Text>
-                <Text style={styles.footerDuration}>Duration: {item.duration}</Text>
+            <View style={styles.bottomSection}>
+                <Text style={styles.description} numberOfLines={1}>
+                    {item.description}
+                </Text>
+                <View style={styles.durationRow}>
+                    <Ionicons name="time-outline" size={10} color="#94A3B8" />
+                    <Text style={styles.durationText}>{item.duration}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
-}
+};
 
 const styles = StyleSheet.create({
     card: {
         flex: 1,
         margin: 8,
-        borderRadius: 20,
         backgroundColor: 'white',
+        borderRadius: 28,
+        borderWidth: 1,
+        borderColor: '#F8FAFC',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.05,
-        shadowRadius: 10,
-        elevation: 3,
+        shadowRadius: 8,
+        elevation: 2,
         overflow: 'hidden',
+    },
+    topSection: {
+        padding: 16,
+        height: 130,
+        position: 'relative',
+    },
+    ownedBadge: {
+        position: 'absolute',
+        top: 12,
+        right: 12,
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 8,
+    },
+    ownedText: {
+        fontSize: 9,
+        fontFamily: 'Nunito_800ExtraBold',
+        color: '#0061FF',
+    },
+    title: {
+        fontSize: 14,
+        fontFamily: 'Nunito_800ExtraBold',
+        color: '#1E293B',
+        lineHeight: 18,
+        paddingRight: 8,
+    },
+    statsContainer: {
+        marginTop: 8,
+    },
+    statRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+    statText: {
+        fontSize: 9,
+        fontFamily: 'Nunito_600SemiBold',
+        color: '#475569',
+        marginLeft: 6,
+    },
+    floatingIcon: {
+        position: 'absolute',
+        bottom: 12,
+        right: 12,
+    },
+    bottomSection: {
+        padding: 12,
+        backgroundColor: 'white',
+        borderTopWidth: 1,
+        borderTopColor: '#F8FAFC',
+    },
+    description: {
+        fontSize: 11,
+        fontFamily: 'Nunito_700Bold',
+        color: '#1E293B',
+        marginBottom: 6,
+    },
+    durationRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    durationText: {
+        fontSize: 9,
+        fontFamily: 'Nunito_500Medium',
+        color: '#94A3B8',
+        marginLeft: 4,
     },
     addCard: {
         flex: 1,
         margin: 8,
-        height: 200,
-        borderRadius: 20,
+        height: 180,
+        borderRadius: 28,
         backgroundColor: 'white',
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: '#F1F5F9',
         borderStyle: 'dashed',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 24,
     },
-    plusIconContainer: {
-        width: 56,
-        height: 56,
-        borderRadius: 18,
+    addIconContainer: {
+        width: 48,
+        height: 48,
+        borderRadius: 16,
         backgroundColor: '#0061FF',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 16,
+        marginBottom: 12,
     },
     addText: {
-        fontSize: 14,
-        fontFamily: 'Nunito_700Bold',
-        color: '#475569',
-    },
-    cardContent: {
-        padding: 16,
-        borderRadius: 20,
-        height: 160,
-        position: 'relative',
-    },
-    cardTitle: {
-        fontSize: 16,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: '#1E293B',
-        lineHeight: 22,
-        width: '70%',
-    },
-    detailsContainer: {
-        marginTop: 12,
-    },
-    detailText: {
         fontSize: 11,
-        fontFamily: 'Nunito_600SemiBold',
-        color: '#475569',
-        marginBottom: 2,
-        opacity: 0.8,
-    },
-    iconContainer: {
-        position: 'absolute',
-        bottom: 12,
-        right: 12,
-    },
-    cardImage: {
-        position: 'absolute',
-        bottom: 12,
-        right: 12,
-        width: 60,
-        height: 60,
-        opacity: 0.9,
-    },
-    footer: {
-        padding: 12,
-    },
-    footerTitle: {
-        fontSize: 13,
         fontFamily: 'Nunito_700Bold',
-        color: '#1E293B',
-        marginBottom: 4,
-    },
-    footerDuration: {
-        fontSize: 11,
-        fontFamily: 'Nunito_500Medium',
         color: '#94A3B8',
+        textAlign: 'center',
     },
 });
+
+export default React.memo(CourseCard);

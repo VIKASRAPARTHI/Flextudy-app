@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 export default function CourseDetailsScreen() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const [isFavorite, setIsFavorite] = useState(false);
+    const [activeTab, setActiveTab] = useState('Details');
 
     // Mock data based on the provided image
     const course = {
@@ -20,284 +21,121 @@ export default function CourseDetailsScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="dark-content" />
+        <View className="flex-1 bg-[#0061FF]">
+            <StatusBar barStyle="light-content" />
 
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <Ionicons name="chevron-back" size={24} color="#1E293B" />
+            {/* Sticky Header */}
+            <View className="px-6 pt-12 pb-6 flex-row items-center justify-between">
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                >
+                    <Ionicons name="chevron-back" size={24} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Course Details</Text>
-                <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
+                <Text className="text-xl font-nunito-extrabold text-white">Course Details</Text>
+                <TouchableOpacity
+                    onPress={() => setIsFavorite(!isFavorite)}
+                    className="w-10 h-10 items-center justify-center bg-white/20 rounded-full"
+                >
                     <Ionicons
                         name={isFavorite ? "heart" : "heart-outline"}
-                        size={24}
-                        color={isFavorite ? "#EF4444" : "#1E293B"}
+                        size={22}
+                        color={isFavorite ? "#EF4444" : "white"}
                     />
                 </TouchableOpacity>
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                {/* Hero Image */}
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{ uri: course.image }}
-                        style={styles.heroImage}
-                        resizeMode="contain"
-                    />
-                </View>
-
-                {/* Info Section */}
-                <View style={styles.infoSection}>
-                    <Text style={styles.title}>{course.title}</Text>
-
-                    <View style={styles.metaRow}>
-                        <Text style={styles.byText}>By </Text>
-                        <Text style={styles.instructorText}>{course.instructor}</Text>
-                        <View style={styles.spacer} />
-                        <Text style={styles.priceLabel}>Price</Text>
-                    </View>
-
-                    <View style={styles.statsRow}>
-                        <View style={styles.ratingContainer}>
-                            <Ionicons name="star" size={16} color="#F59E0B" />
-                            <Text style={styles.ratingText}>{course.rating}</Text>
-                            <Text style={styles.reviewText}>({course.reviews} Reviews)</Text>
-                        </View>
-                        <Text style={styles.price}>${course.price}</Text>
-                    </View>
-                </View>
-
-                {/* Tabs */}
-                <View style={styles.tabBar}>
-                    <View style={styles.activeTab}>
-                        <Text style={styles.activeTabText}>Details</Text>
-                        <View style={styles.activeIndicator} />
-                    </View>
-                    <View style={styles.inactiveTab}>
-                        <Text style={styles.inactiveTabText}>Lessons</Text>
-                    </View>
-                    <View style={styles.inactiveTab}>
-                        <Text style={styles.inactiveTabText}>Reviews</Text>
-                    </View>
-                </View>
-
-                {/* Description */}
-                <View style={styles.descriptionContainer}>
-                    <Text style={styles.description}>{course.description}</Text>
-                </View>
-            </ScrollView>
-
-            {/* Bottom Bar */}
-            <View style={styles.bottomBar}>
-                <TouchableOpacity
-                    style={styles.courseGuideButton}
-                    onPress={() => router.push(`/course-guide/${id}` as any)}
+            <View className="flex-1 bg-white rounded-t-[40px] shadow-2xl overflow-hidden">
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 120 }}
                 >
-                    <Text style={styles.courseGuideText}>Course Guide</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.enrollButton}>
-                    <Text style={styles.enrollText}>Enroll Now</Text>
-                </TouchableOpacity>
+                    {/* Hero Image Container */}
+                    <View className="px-6 pt-8">
+                        <View className="w-full h-64 bg-[#EFF6FF] rounded-[32px] items-center justify-center border border-blue-50">
+                            <Image
+                                source={{ uri: course.image }}
+                                className="w-[80%] h-[80%]"
+                                resizeMode="contain"
+                            />
+                        </View>
+                    </View>
+
+                    {/* Info Section */}
+                    <View className="px-6 mt-8">
+                        <Text className="text-2xl font-nunito-extrabold text-[#1E293B] mb-2">{course.title}</Text>
+
+                        <View className="flex-row items-center mb-6">
+                            <Text className="text-gray-400 font-nunito-semibold text-sm">By </Text>
+                            <Text className="text-[#0061FF] font-nunito-bold text-sm">{course.instructor}</Text>
+                            <View className="flex-1" />
+                            <View className="bg-orange-50 px-3 py-1 rounded-lg flex-row items-center border border-orange-100">
+                                <Ionicons name="star" size={14} color="#F59E0B" />
+                                <Text className="ml-1 text-sm font-nunito-extrabold text-[#F59E0B]">{course.rating}</Text>
+                            </View>
+                        </View>
+
+                        {/* Stats Row */}
+                        <View className="flex-row justify-between mb-8">
+                            <View className="items-center bg-gray-50/50 p-4 rounded-3xl border border-gray-100 w-[30%]">
+                                <Ionicons name="people-outline" size={20} color="#0061FF" />
+                                <Text className="text-sm font-nunito-extrabold text-[#1E293B] mt-2">2.5k+</Text>
+                                <Text className="text-[9px] font-nunito-bold text-gray-400 uppercase">Students</Text>
+                            </View>
+                            <View className="items-center bg-gray-50/50 p-4 rounded-3xl border border-gray-100 w-[30%]">
+                                <Ionicons name="time-outline" size={20} color="#F59E0B" />
+                                <Text className="text-sm font-nunito-extrabold text-[#1E293B] mt-2">12h 30m</Text>
+                                <Text className="text-[9px] font-nunito-bold text-gray-400 uppercase">Duration</Text>
+                            </View>
+                            <View className="items-center bg-gray-50/50 p-4 rounded-3xl border border-gray-100 w-[30%]">
+                                <Ionicons name="ribbon-outline" size={20} color="#0EA5E9" />
+                                <Text className="text-sm font-nunito-extrabold text-[#1E293B] mt-2">Expert</Text>
+                                <Text className="text-[9px] font-nunito-bold text-gray-400 uppercase">Level</Text>
+                            </View>
+                        </View>
+
+                        {/* Custom Tabs */}
+                        <View className="flex-row bg-gray-50 p-1.5 rounded-2xl border border-gray-100 mb-8">
+                            {['Details', 'Lessons', 'Reviews'].map((tab) => (
+                                <TouchableOpacity
+                                    key={tab}
+                                    style={{ flex: 1 }}
+                                    className={`py-2.5 rounded-xl items-center ${activeTab === tab ? 'bg-white shadow-sm border border-gray-100' : ''}`}
+                                    onPress={() => setActiveTab(tab)}
+                                >
+                                    <Text className={`text-xs font-nunito-bold ${activeTab === tab ? 'text-[#0061FF]' : 'text-gray-400'}`}>
+                                        {tab}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        {/* Description */}
+                        {activeTab === 'Details' && (
+                            <View>
+                                <Text className="text-lg font-nunito-extrabold text-[#1E293B] mb-3">About Course</Text>
+                                <Text className="text-sm font-nunito-medium text-gray-500 leading-6">
+                                    {course.description}
+                                </Text>
+                            </View>
+                        )}
+                    </View>
+                </ScrollView>
+
+                {/* Fixed Bottom Bar */}
+                <View className="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 flex-row items-center">
+                    <View className="mr-6">
+                        <Text className="text-gray-400 font-nunito-bold text-[10px] uppercase">Course Price</Text>
+                        <Text className="text-2xl font-nunito-extrabold text-[#1E293B]">${course.price}</Text>
+                    </View>
+                    <TouchableOpacity
+                        className="flex-1 bg-[#0061FF] h-14 rounded-2xl items-center justify-center shadow-lg shadow-blue-500/20"
+                        onPress={() => router.push(`/course-guide/${id}` as any)}
+                    >
+                        <Text className="text-white font-nunito-extrabold text-base">Course Guide</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingTop: 60,
-        paddingBottom: 20,
-    },
-    backButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontFamily: 'Nunito_700Bold',
-        color: '#1E293B',
-    },
-    scrollContent: {
-        paddingBottom: 100,
-    },
-    imageContainer: {
-        width: '100%',
-        height: 280,
-        backgroundColor: '#EFF6FF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 24,
-        marginHorizontal: 20,
-        borderRadius: 20,
-        alignSelf: 'center',
-        maxWidth: '90%',
-    },
-    heroImage: {
-        width: '80%',
-        height: '80%',
-    },
-    infoSection: {
-        paddingHorizontal: 24,
-        marginBottom: 24,
-    },
-    title: {
-        fontSize: 22,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: '#1E293B',
-        marginBottom: 8,
-    },
-    metaRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 4,
-    },
-    byText: {
-        fontSize: 14,
-        fontFamily: 'Nunito_500Medium',
-        color: '#64748B',
-    },
-    instructorText: {
-        fontSize: 14,
-        fontFamily: 'Nunito_700Bold',
-        color: '#0061FF',
-    },
-    spacer: {
-        flex: 1,
-    },
-    priceLabel: {
-        fontSize: 12,
-        fontFamily: 'Nunito_500Medium',
-        color: '#64748B',
-    },
-    statsRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    ratingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    ratingText: {
-        fontSize: 14,
-        fontFamily: 'Nunito_700Bold',
-        color: '#1E293B',
-        marginLeft: 4,
-    },
-    reviewText: {
-        fontSize: 14,
-        fontFamily: 'Nunito_500Medium',
-        color: '#64748B',
-        marginLeft: 4,
-    },
-    price: {
-        fontSize: 24,
-        fontFamily: 'Nunito_800ExtraBold',
-        color: '#1E293B',
-    },
-    tabBar: {
-        flexDirection: 'row',
-        paddingHorizontal: 24,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
-        marginBottom: 20,
-    },
-    activeTab: {
-        paddingVertical: 12,
-        marginRight: 24,
-        position: 'relative',
-    },
-    activeTabText: {
-        fontSize: 16,
-        fontFamily: 'Nunito_700Bold',
-        color: '#1E293B',
-    },
-    activeIndicator: {
-        position: 'absolute',
-        bottom: -1,
-        left: 0,
-        right: 0,
-        height: 2,
-        backgroundColor: '#1E293B',
-        borderRadius: 1,
-    },
-    inactiveTab: {
-        paddingVertical: 12,
-        marginRight: 24,
-    },
-    inactiveTabText: {
-        fontSize: 16,
-        fontFamily: 'Nunito_600SemiBold',
-        color: '#94A3B8',
-    },
-    descriptionContainer: {
-        paddingHorizontal: 24,
-    },
-    description: {
-        fontSize: 14,
-        fontFamily: 'Nunito_500Medium',
-        color: '#64748B',
-        lineHeight: 24,
-    },
-    bottomBar: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        paddingHorizontal: 24,
-        paddingTop: 16,
-        paddingBottom: 34,
-        borderTopWidth: 1,
-        borderTopColor: '#F1F5F9',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 10,
-        elevation: 10,
-    },
-    courseGuideButton: {
-        flex: 1,
-        backgroundColor: '#0061FF',
-        borderRadius: 12,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 12,
-        shadowColor: '#0061FF',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 4,
-    },
-    courseGuideText: {
-        color: 'white',
-        fontSize: 16,
-        fontFamily: 'Nunito_700Bold',
-    },
-    enrollButton: {
-        flex: 1,
-        backgroundColor: '#94A3B8', // Grey as per image, or change to secondary color
-        borderRadius: 12,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 12,
-    },
-    enrollText: {
-        color: 'white',
-        fontSize: 16,
-        fontFamily: 'Nunito_700Bold',
-    },
-});
