@@ -27,12 +27,12 @@ export default function ResultScreen() {
                     <Ionicons
                         name={isSuccess ? "checkmark-circle" : "alert-circle"}
                         size={48}
-                        color={isSuccess ? "#22C55E" : "#EF4444"}
+                        color={isSuccess ? "#22C55E" : "#EF4444"} 
                     />
                 </View>
 
                 <Text className="text-2xl font-nunito-extrabold text-[#1E293B] mb-2 text-center">
-                    {isSuccess ? 'Payment Successful 🎉' : 'Payment Failed'}
+                    {isSuccess ? 'Payment Successful' : 'Payment Failed'}
                 </Text>
 
                 <Text className="text-sm font-nunito-medium text-gray-500 text-center mb-8 leading-6">
